@@ -108,7 +108,7 @@ export default function TransactionModal({ isOpen, onClose, onSaveSuccess, trans
             <h3 className="text-lg font-bold">
               {transactionToEdit ? 'Edit Transaction' : 'Record Transaction'}
             </h3>
-            <p className="text-xs text-brand-100">Spendrym Personal Financial Ledger</p>
+            <p className="text-xs text-brand-100">Xpenzic Personal Financial Ledger</p>
           </div>
           <button 
             onClick={onClose}

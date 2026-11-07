@@ -32,7 +32,7 @@ def add_cors_headers(response):
 def health_check():
     return jsonify({
         "status": "healthy",
-        "service": "Spendrym Data Analytics API",
+        "service": "Xpenzic Data Analytics API",
         "version": "1.0.0"
     })
 
@@ -376,7 +376,7 @@ def export_csv():
     df.to_csv(output, index=False)
     
     response = make_response(output.getvalue())
-    response.headers["Content-Disposition"] = "attachment; filename=spendrym_transactions_export.csv"
+    response.headers["Content-Disposition"] = "attachment; filename=xpenzic_transactions_export.csv"
     response.headers["Content-type"] = "text/csv"
     return response
 
@@ -390,7 +390,7 @@ def serve_frontend(path):
         else:
             return send_from_directory(DIST_FOLDER, 'index.html')
     return jsonify({
-        "message": "Spendrym Analytics API running. Frontend dist not found. Run Vite frontend on port 3000."
+        "message": "Xpenzic Analytics API running. Frontend dist not found. Run Vite frontend on port 3000."
     })
 
 if __name__ == '__main__':
@@ -401,5 +401,5 @@ if __name__ == '__main__':
     if count == 0:
         seed_database()
 
-    print("Starting Spendrym Data Analytics Python Backend on port 5000...")
+    print("Starting Xpenzic Data Analytics Python Backend on port 5000...")
     app.run(host='0.0.0.0', port=5000, debug=False)

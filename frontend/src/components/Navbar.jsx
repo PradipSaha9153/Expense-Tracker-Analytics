@@ -1,4 +1,5 @@
 import React from 'react';
+import xpenzicLogo from '../assets/xpenzic-logo.jpg';
 import { 
   TrendingUp, 
   PlusCircle, 
@@ -56,13 +57,17 @@ export default function Navbar({
         <div className="flex items-center justify-between h-16">
           {/* Logo & title */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-700 via-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-700/20">
-              <TrendingUp className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl overflow-hidden shadow-md shadow-brand-900/25 shrink-0 border border-slate-200/80 bg-slate-900">
+              <img 
+                src={xpenzicLogo} 
+                alt="Xpenzic Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-800 to-brand-600 bg-clip-text text-transparent">
-                  Spendrym
+                  Xpenzic
                 </span>
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800">
                   Data Analytics

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Home,
   Utensils,
@@ -40,6 +40,73 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { getCategoryColor } from '../utils/formatters';
+
+// Map categories to high-resolution 3D clay icons matching the 50 Essential 3D Icons Pack
+export const CATEGORY_3D_MAP = {
+  // Main Expense Categories
+  'Home': '/icons/3d/home.png',
+  'Food & Beverages': '/icons/3d/food.png',
+  'Shopping': '/icons/3d/shopping.png',
+  'Transport': '/icons/3d/transport.png',
+  'Entertainment': '/icons/3d/entertainment.png',
+  'Utility Bills': '/icons/3d/utility.png',
+  'Health': '/icons/3d/health.png',
+  'Personal Development': '/icons/3d/education.png',
+  'Gifts & Donations': '/icons/3d/gift.png',
+  'Kids': '/icons/3d/kids.png',
+  'OtherExpense': '/icons/3d/package.png',
+
+  // Main Income Categories
+  'Salary': '/icons/3d/salary.png',
+  'InvestmentIncome': '/icons/3d/investment.png',
+  'Investment': '/icons/3d/investment.png',
+  'Bonus': '/icons/3d/bonus.png',
+  'Side job': '/icons/3d/laptop.png',
+  'GiftsIncome': '/icons/3d/gift.png',
+  'OtherIncome': '/icons/3d/coins.png',
+
+  // Subcategories
+  'Food': '/icons/3d/food.png',
+  'Beverages': '/icons/3d/food.png',
+  'Daily Necessities': '/icons/3d/shopping.png',
+  'Restaurant': '/icons/3d/food.png',
+  'Fuel': '/icons/3d/fuel.png',
+  'Parking': '/icons/3d/transport.png',
+  'Taxi': '/icons/3d/transport.png',
+  'Services & Maintenance': '/icons/3d/package.png',
+  'Furnishings': '/icons/3d/home.png',
+  'Home Services': '/icons/3d/home.png',
+  'Pets': '/icons/3d/kids.png',
+  'Mortgage & Rent': '/icons/3d/home.png',
+  'Clothes': '/icons/3d/shopping.png',
+  'Accessories': '/icons/3d/shopping.png',
+  'Electronic Devices': '/icons/3d/laptop.png',
+  'Movies': '/icons/3d/movies.png',
+  'Games': '/icons/3d/entertainment.png',
+  'Music': '/icons/3d/entertainment.png',
+  'Travel': '/icons/3d/travel.png',
+  'Electricity': '/icons/3d/utility.png',
+  'Internet': '/icons/3d/laptop.png',
+  'Mobile Phone': '/icons/3d/laptop.png',
+  'Water': '/icons/3d/utility.png',
+  'Doctor': '/icons/3d/health.png',
+  'Medicine': '/icons/3d/health.png',
+  'Health Insurance': '/icons/3d/health.png',
+  'Sports': '/icons/3d/entertainment.png',
+  'Education': '/icons/3d/education.png',
+  'Business': '/icons/3d/salary.png',
+  'InvestmentExpense': '/icons/3d/investment.png',
+  'Wedding': '/icons/3d/gift.png',
+  'Charity': '/icons/3d/gift.png',
+  'Tuition': '/icons/3d/education.png',
+  'Pocket Money': '/icons/3d/coins.png',
+  'Baby Products': '/icons/3d/kids.png'
+};
+
+export function get3DIconPath(category) {
+  if (!category) return '/icons/3d/package.png';
+  return CATEGORY_3D_MAP[category] || '/icons/3d/package.png';
+}
 
 export const CATEGORY_ICON_MAP = {
   // Main Expense Categories
@@ -112,26 +179,47 @@ export function CategoryIcon({ category, className = "w-4 h-4", ...props }) {
   return <IconComponent className={className} {...props} />;
 }
 
-export function CategoryBadge({ category, size = "md", className = "", style = {} }) {
+export function CategoryBadge({ category, size = "md", use3D = true, className = "", style = {} }) {
+  const [imgError, setImgError] = useState(false);
+  const icon3DPath = get3DIconPath(category);
   const catColor = getCategoryColor(category);
-  
+
   const sizeClasses = {
-    xs: { box: "w-5 h-5 rounded-md", icon: "w-3 h-3" },
-    sm: { box: "w-7 h-7 rounded-lg", icon: "w-3.5 h-3.5" },
-    md: { box: "w-8 h-8 rounded-xl", icon: "w-4 h-4" },
-    lg: { box: "w-10 h-10 rounded-xl shadow-xs", icon: "w-5 h-5" },
-    xl: { box: "w-12 h-12 rounded-2xl shadow-sm", icon: "w-6 h-6" }
+    xs: { box: "w-6 h-6 rounded-lg", icon: "w-5 h-5", fallbackBox: "w-5 h-5 rounded-md", fallbackIcon: "w-3 h-3" },
+    sm: { box: "w-8 h-8 rounded-xl", icon: "w-6.5 h-6.5", fallbackBox: "w-7 h-7 rounded-lg", fallbackIcon: "w-3.5 h-3.5" },
+    md: { box: "w-10 h-10 rounded-2xl", icon: "w-8 h-8", fallbackBox: "w-8 h-8 rounded-xl", fallbackIcon: "w-4 h-4" },
+    lg: { box: "w-13 h-13 sm:w-14 sm:h-14 rounded-2xl", icon: "w-10 h-10 sm:w-11 sm:h-11", fallbackBox: "w-10 h-10 rounded-xl", fallbackIcon: "w-5 h-5" },
+    xl: { box: "w-16 h-16 rounded-3xl", icon: "w-13 h-13", fallbackBox: "w-12 h-12 rounded-2xl", fallbackIcon: "w-6 h-6" }
   };
 
   const selectedSize = sizeClasses[size] || sizeClasses.md;
 
+  if (use3D && icon3DPath && !imgError) {
+    return (
+      <div
+        className={`${selectedSize.box} bg-gradient-to-b from-white via-slate-50/90 to-slate-100/80 border border-slate-200/70 shadow-[0_4px_12px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center shrink-0 p-1 group transition-all duration-200 hover:shadow-md hover:border-slate-300 ${className}`}
+        style={style}
+        title={category}
+      >
+        <img
+          src={icon3DPath}
+          alt={category}
+          onError={() => setImgError(true)}
+          className={`${selectedSize.icon} object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.15)] transition-transform duration-200 group-hover:scale-110`}
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
+  // Fallback to flat badge if 3D icon fails to load
   return (
     <div
-      className={`${selectedSize.box} flex items-center justify-center font-bold text-white shrink-0 ${className}`}
+      className={`${selectedSize.fallbackBox} flex items-center justify-center font-bold text-white shrink-0 ${className}`}
       style={{ backgroundColor: catColor, ...style }}
       title={category}
     >
-      <CategoryIcon category={category} className={`${selectedSize.icon} text-white`} />
+      <CategoryIcon category={category} className={`${selectedSize.fallbackIcon} text-white`} />
     </div>
   );
 }

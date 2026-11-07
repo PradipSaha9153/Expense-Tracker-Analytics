@@ -1,4 +1,4 @@
-# Spendrym • Financial Data Analytics & Intelligence Platform
+# Xpenzic • Financial Data Analytics & Intelligence Platform
 
 > An advanced, full-stack Data Analysis & Financial Intelligence web application built with **Python (Flask, Pandas, NumPy, Scikit-Learn)**, **React 18**, **Tailwind CSS**, and **Chart.js**, inspired by and expanding upon the **Spendrym / MMAS Expense Tracker** Android architecture (`E:\AndroidDev\projects\Expense-Tracker-Application`).
 
