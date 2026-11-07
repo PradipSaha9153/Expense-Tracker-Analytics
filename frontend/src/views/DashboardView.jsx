@@ -288,9 +288,10 @@ export default function DashboardView({
 
         {/* Right 1 Col: Donut Breakdown (Matches Spendrym Android ChartPie) */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-2">
-              <span className="p-2 rounded-xl bg-brand-50 text-brand-700">
+          {/* Header Area: Title on top, Option Pills side-by-side below */}
+          <div className="mb-3">
+            <div className="flex items-center space-x-2 mb-2.5">
+              <span className="p-2 rounded-xl bg-brand-50 text-brand-700 shrink-0">
                 <PieIcon className="w-4 h-4" />
               </span>
               <h3 className="text-base font-bold text-slate-800">
@@ -298,42 +299,47 @@ export default function DashboardView({
               </h3>
             </div>
 
-            {/* Expense / Income switcher */}
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-xs font-semibold">
-              <button
-                onClick={() => setBreakdownType('Expense')}
-                className={`px-2.5 py-1 rounded-lg transition ${
-                  breakdownType === 'Expense' ? 'bg-rose-500 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Expense
-              </button>
-              <button
-                onClick={() => setBreakdownType('Income')}
-                className={`px-2.5 py-1 rounded-lg transition ${
-                  breakdownType === 'Income' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Income
-              </button>
-            </div>
-          </div>
+            {/* Below Title: Expense/Income & Amount/Percentage Side-by-Side */}
+            <div className="flex items-center justify-between sm:justify-start gap-2 overflow-x-auto pt-0.5">
+              {/* Expense / Income switcher */}
+              <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-xs font-semibold">
+                <button
+                  onClick={() => setBreakdownType('Expense')}
+                  className={`px-3 py-1 rounded-lg transition-all ${
+                    breakdownType === 'Expense' ? 'bg-rose-500 text-white shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Expense
+                </button>
+                <button
+                  onClick={() => setBreakdownType('Income')}
+                  className={`px-3 py-1 rounded-lg transition-all ${
+                    breakdownType === 'Income' ? 'bg-emerald-600 text-white shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Income
+                </button>
+              </div>
 
-          {/* Amount / Percentage Toggle pill */}
-          <div className="flex justify-end mb-2">
-            <div className="inline-flex bg-brand-50 p-0.5 rounded-lg text-[11px] font-semibold text-brand-800">
-              <button
-                onClick={() => setDisplayMode('amount')}
-                className={`px-2 py-0.5 rounded-md transition ${displayMode === 'amount' ? 'bg-brand-600 text-white' : 'text-brand-800'}`}
-              >
-                Amount
-              </button>
-              <button
-                onClick={() => setDisplayMode('percentage')}
-                className={`px-2 py-0.5 rounded-md transition ${displayMode === 'percentage' ? 'bg-brand-600 text-white' : 'text-brand-800'}`}
-              >
-                Percentage
-              </button>
+              {/* Amount / Percentage Toggle pill */}
+              <div className="inline-flex bg-brand-50 p-0.5 rounded-xl text-xs font-semibold text-brand-800">
+                <button
+                  onClick={() => setDisplayMode('amount')}
+                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                    displayMode === 'amount' ? 'bg-brand-600 text-white shadow-xs font-bold' : 'text-brand-800 hover:text-brand-900'
+                  }`}
+                >
+                  Amount
+                </button>
+                <button
+                  onClick={() => setDisplayMode('percentage')}
+                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                    displayMode === 'percentage' ? 'bg-brand-600 text-white shadow-xs font-bold' : 'text-brand-800 hover:text-brand-900'
+                  }`}
+                >
+                  Percentage
+                </button>
+              </div>
             </div>
           </div>
 

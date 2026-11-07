@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import xpenzicLogo from '../assets/xpenzic-logo.jpg';
+import xpenzicIcon from '../assets/xpenzic-icon.jpg';
+import xpenzicWordmark from '../assets/xpenzic-wordmark.png';
 import { 
   TrendingUp, 
   BarChart3, 
@@ -68,30 +69,32 @@ export default function Sidebar({
           {/* Brand Logo & Title */}
           <div className="h-16 flex items-center px-3.5 border-b border-slate-100 overflow-hidden">
             <div className={`flex items-center w-full ${isExpanded ? 'justify-start' : 'justify-center'}`}>
-              {/* Logo Mark */}
-              <div className={`w-11 h-11 rounded-2xl overflow-hidden shadow-md shadow-brand-900/25 shrink-0 transition-all duration-300 border border-slate-200/80 bg-slate-900 ${
+              {/* Logo Mark (New Xpenzic Icon) */}
+              <div className={`w-11 h-11 rounded-2xl overflow-hidden shadow-xs border border-slate-200/90 bg-white p-1 flex items-center justify-center shrink-0 transition-all duration-300 ${
                 isExpanded ? 'mr-3' : 'mx-auto'
               }`}>
                 <img 
-                  src={xpenzicLogo} 
-                  alt="Xpenzic Logo" 
-                  className="w-full h-full object-cover"
+                  src={xpenzicIcon} 
+                  alt="Xpenzic Icon" 
+                  className="w-full h-full object-contain"
                 />
               </div>
 
-              {/* Brand text revealed on hover */}
+              {/* Brand wordmark & subtitle revealed on hover */}
               <div className={`transition-all duration-300 overflow-hidden ${
-                isExpanded ? 'opacity-100 max-w-[170px]' : 'opacity-0 max-w-0 pointer-events-none'
+                isExpanded ? 'opacity-100 max-w-[175px]' : 'opacity-0 max-w-0 pointer-events-none'
               }`}>
-                <div className="flex items-center space-x-1.5 whitespace-nowrap">
-                  <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-brand-800 to-brand-600 bg-clip-text text-transparent">
-                    Xpenzic
-                  </span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-100 text-emerald-800">
+                <div className="flex items-center space-x-2">
+                  <img 
+                    src={xpenzicWordmark} 
+                    alt="Xpenzic" 
+                    className="h-6 w-auto object-contain"
+                  />
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800">
                     Analytics
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 font-medium whitespace-nowrap">Financial Intelligence</p>
+                <p className="text-[10px] text-slate-400 font-medium whitespace-nowrap mt-0.5">Financial Intelligence</p>
               </div>
             </div>
 
