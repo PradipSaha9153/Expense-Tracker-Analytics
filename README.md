@@ -1,0 +1,158 @@
+# Spendrym • Financial Data Analytics & Intelligence Platform
+
+> An advanced, full-stack Data Analysis & Financial Intelligence web application built with **Python (Flask, Pandas, NumPy, Scikit-Learn)**, **React 18**, **Tailwind CSS**, and **Chart.js**, inspired by and expanding upon the **Spendrym / MMAS Expense Tracker** Android architecture (`E:\AndroidDev\projects\Expense-Tracker-Application`).
+
+---
+
+## 📊 Project Overview & Core Data Analysis Pillars
+
+This project converts the transactional and categorical foundation of the Spendrym mobile expense tracker into an enterprise-grade **Financial Data Science & Visualization Platform** designed for deep economic insights, pattern discovery, and predictive forecasting.
+
+### 🔬 Implemented Data Science & Analytics Algorithms:
+1. **Ordinary Least Squares (OLS) Time-Series Regression**:
+   - Computes empirical daily spend trajectory ($y = mx + c$), slope velocity, standard error of estimate ($\sigma$), and coefficient of determination ($R^2$).
+   - Generates a **30-Day Forward Predictive Spending Forecast** bounded by a **95% Confidence Interval ($t$-distribution)** band.
+2. **Statistical Anomaly & Outlier Detection**:
+   - Employs **Modified $Z$-Score** and **Interquartile Range (IQR)** criteria across individual category distributions.
+   - Detects and flags anomalous spikes with calculated severity ratings (`Critical` vs `Moderate`), deviation multiplier ($N\times$ average), and expected category mean comparison.
+3. **Pareto 80/20 Distribution Analysis**:
+   - Calculates cumulative expenditure percentage across ranked spending areas.
+   - Highlights the core 20% driver categories that consume ~80% of total outlay for targeted budget optimization.
+4. **Behavioral Spending Habit Analysis**:
+   - Analyzes **Weekday vs Weekend** elasticity, calculating discretionary spending multipliers and leisure category shifts.
+   - Computes **Day-of-Week intensity distribution** (Monday through Sunday) and payment instrument preferences (UPI vs Card vs Cash vs Bank vs Wallet).
+5. **Monte Carlo Stochastic Runway & Solvency Simulator**:
+   - Runs **500 stochastic trials** sampling empirical daily cash flows over a 180-day future horizon.
+   - Calculates 10th percentile (Conservative / Bear), 50th percentile (Expected Median), and 90th percentile (Optimistic / Bull) balance trajectories and an overall **Solvency Probability Score**.
+6. **365-Day Daily Spending Density Heatmap Matrix**:
+   - GitHub-style interactive density matrix mapping daily transaction frequency and cash outflow intensity.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies | Purpose |
+|---|---|---|
+| **Backend & Analytics** | **Python 3.15**, **Flask**, **Pandas**, **NumPy**, **Scikit-Learn**, **SciPy** | REST API endpoints, statistical modeling, OLS regression, anomaly detection, Monte Carlo engine |
+| **Database** | **SQLite 3** | ACID relational storage for transactions, category hierarchies, and monthly budgets |
+| **Frontend Framework** | **React 18** (Vite 6 Bundler) | Single Page Application (SPA), responsive state management, modular component architecture |
+| **Styling & Design System**| **Tailwind CSS 3.4** | Modern emerald/teal glassmorphism, responsive grid, bespoke Spendrym tokens |
+| **Visualization Engine**| **Chart.js 4.4**, **React-Chartjs-2** | Spline area gradients, interactive donuts with center annotations, dual-axis Pareto charts, confidence bands |
+| **Icons & Typography** | **Lucide React**, **Google Poppins** | Consistent aesthetic mirroring the Spendrym mobile application |
+
+---
+
+## 📁 Repository Structure
+
+```text
+Expance-Tracker/
+├── backend/
+│   ├── app.py               # Flask REST API server with CORS & SPA static hosting
+│   ├── analytics.py         # Advanced statistical, regression, anomaly & Monte Carlo algorithms
+│   ├── database.py          # SQLite schema & category taxonomy initialization
+│   ├── seed_data.py         # Realistic 6-month transaction generator with statistical outliers
+│   ├── test_analytics.py    # Analytical test suite & verification harness
+│   └── requirements.txt     # Python library specifications
+├── frontend/
+│   ├── index.html           # HTML entry point with Google Poppins fonts
+│   ├── vite.config.js       # Vite configuration with /api reverse proxy
+│   ├── tailwind.config.js   # Tailwind custom color palette and typography
+│   ├── package.json         # NPM scripts and dependencies
+│   ├── src/
+│   │   ├── main.jsx         # React DOM root mounting
+│   │   ├── App.jsx          # Top-level state, navigation tabs, and modal controls
+│   │   ├── index.css        # Tailwind directives and custom scrollbars
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx           # App bar, period filters, currency switcher, quick actions
+│   │   │   ├── KpiCard.jsx          # Metric cards with trends, icons, and status badges
+│   │   │   └── TransactionModal.jsx # Add/Edit modal with quick increments and method selectors
+│   │   ├── views/
+│   │   │   ├── DashboardView.jsx       # Executive summary, monthly cash flow spline, donut breakdown
+│   │   │   ├── AnalyticsStudioView.jsx # OLS regression, Pareto 80/20, Anomaly detection, Monte Carlo
+│   │   │   ├── VisualizationsView.jsx  # 365-day calendar heatmap matrix, Budget variance waterfall
+│   │   │   ├── CalendarView.jsx        # Day-by-day calendar timeline matching Spendrym Android
+│   │   │   ├── TransactionsView.jsx    # Filterable ledger with live search & CSV export
+│   │   │   └── SettingsView.jsx        # Budget limits, dataset seed/reset, architecture specs
+│   │   ├── services/
+│   │   │   └── api.js                  # Frontend REST API client
+│   │   └── utils/
+│   │       └── formatters.js           # Multi-currency formatting, dates, category colors
+├── start.bat                # 1-Click launcher starting both Backend & Frontend
+├── run_backend.bat          # Standalone Python backend runner
+├── run_frontend.bat         # Standalone Vite React frontend runner
+└── README.md                # Comprehensive documentation
+```
+
+---
+
+## 🚀 How to Run the Application
+
+### Option A: One-Click Startup (Recommended for Windows)
+Simply double-click:
+```bat
+start.bat
+```
+This automatically starts:
+- **Backend API**: `http://localhost:5000`
+- **Frontend UI**: `http://localhost:3000`
+
+---
+
+### Option B: Manual Startup
+
+#### 1. Start Python Backend
+Open a terminal in the project directory:
+```powershell
+cd backend
+python app.py
+```
+*The backend automatically initializes `tracker.db` and populates 500+ realistic transactions spanning 6 months if the database is fresh.*
+
+#### 2. Start React Frontend
+In a separate terminal:
+```powershell
+cd frontend
+npm run dev
+```
+Open **`http://localhost:3000`** in your browser.
+
+---
+
+## 💡 Key Views & Capabilities
+
+1. **Executive Dashboard (`DashboardView`)**:
+   - Top KPI cards: Total Income, Outflows, Net Balance, Savings Rate (%), 30-Day Burn Rate, Financial Runway (Months).
+   - Monthly Cash Flow Spline Area Chart (Income vs Expense vs Net reserve).
+   - Spendrym Donut Breakdown Chart with center annotation and Amount/Percentage toggle.
+   - Ranked category-wise breakdown cards with progress bars and subcategory pills.
+
+2. **Deep Analytics Studio (`AnalyticsStudioView`)**:
+   - **Predictive 30-Day Spending Forecast**: Fitted OLS linear regression line with upper and lower 95% Confidence Interval error bounds.
+   - **Pareto 80/20 Rule Analysis**: Cumulative curve pinpointing the critical 20% driver categories.
+   - **Statistical Anomaly Detection**: Table of flagged outliers with Z-scores, category means, and severity tags.
+   - **Behavioral Insights**: Weekend vs Weekday spending multiplier and day-of-week bar chart.
+   - **Monte Carlo Runway Simulation**: 500 stochastic trials forecasting 6-month net reserve balance.
+
+3. **Visualizations Hub (`VisualizationsView`)**:
+   - **Calendar Spending Density Heatmap**: 20-week daily density grid colored by cash outflow intensity.
+   - **Monthly Budget Limits vs Actual Consumption**: Visualizes compliance vs overruns per category.
+
+4. **Calendar Timeline (`CalendarView`)**:
+   - Complete day-by-day calendar matching the original Spendrym mobile application.
+   - Color-coded dot markers on days with transactions (Income vs Expense).
+   - Daily Summary card showing Income, Expense, and Net Balance for any selected day.
+   - Category filtering dropdown and day transaction ledger.
+
+5. **Transaction Ledger (`TransactionsView`)**:
+   - Live search by note, memo, or category.
+   - Filter by Type, Category, Payment Method, and Date.
+   - Sortable columns (Date, Amount, Category).
+   - Add, Edit, Delete transactions.
+   - **Export to CSV** button for opening data in Excel or Jupyter Notebooks.
+
+6. **Budget & Settings (`SettingsView`)**:
+   - Real-time monthly budget limit editor per category.
+   - Currency switcher (₹ INR, $ USD, € EUR, £ GBP).
+   - One-click **Seed Demo Data** (reloads 6 months of realistic transactions).
+   - One-click **Purge Records** (clears database).
+
