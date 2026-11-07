@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
+import calendar
 import math
 
 def get_empty_summary():
@@ -122,8 +123,31 @@ def compute_category_breakdown(df, trans_type='Expense'):
 
     return results
 
-def compute_monthly_trends(df):
+def compute_monthly_trends(df, time_filter=None, start_date=None, end_date=None):
+    if df.empty and not start_date and not time_filter:
+        return []
+
+    # If df is empty but time_filter is 'month' or start_date is supplied, generate zero-filled days
     if df.empty:
+        if time_filter == 'month' or start_date:
+            try:
+                s_dt = datetime.strptime(start_date, '%Y-%m-%d') if start_date else datetime.now()
+            except Exception:
+                s_dt = datetime.now()
+            num_days = calendar.monthrange(s_dt.year, s_dt.month)[1]
+            month_abbr = calendar.month_abbr[s_dt.month]
+            return [{
+                "month_key": f"{s_dt.year:04d}-{s_dt.month:02d}-{d:02d}",
+                "month_label": f"{month_abbr} {d:02d}",
+                "day_number": d,
+                "total_days": num_days,
+                "income": 0.0,
+                "expense": 0.0,
+                "net_savings": 0.0,
+                "cumulative_savings": 0.0,
+                "savings_rate": 0.0,
+                "mom_expense_growth_pct": 0.0
+            } for d in range(1, num_days + 1)]
         return []
 
     df = df.copy()
@@ -132,6 +156,97 @@ def compute_monthly_trends(df):
     df['month_label'] = df['date_dt'].dt.strftime('%b %Y')
 
     months = sorted(df['month_year'].unique())
+
+    # Case 1: "This Month" selected OR dataset contains only 1 single month -> Show 28, 29, 30, or 31 days!
+    if time_filter == 'month' or len(months) == 1:
+        if start_date:
+            try:
+                s_dt = datetime.strptime(start_date, '%Y-%m-%d')
+                year = s_dt.year
+                month = s_dt.month
+            except Exception:
+                ref_dt = df['date_dt'].max()
+                year = ref_dt.year
+                month = ref_dt.month
+        else:
+            ref_dt = df['date_dt'].max()
+            year = ref_dt.year
+            month = ref_dt.month
+
+        num_days = calendar.monthrange(year, month)[1] # 28, 29, 30, or 31 days
+        month_abbr = calendar.month_abbr[month]
+
+        # Filter strictly for this year and month
+        m_df = df[(df['date_dt'].dt.year == year) & (df['date_dt'].dt.month == month)]
+        inc_df = m_df[m_df['type'] == 'Income']
+        exp_df = m_df[m_df['type'] == 'Expense']
+
+        daily_inc = inc_df.groupby(inc_df['date_dt'].dt.day)['amount'].sum().to_dict()
+        daily_exp = exp_df.groupby(exp_df['date_dt'].dt.day)['amount'].sum().to_dict()
+
+        trend_data = []
+        cum_savings = 0.0
+
+        for day in range(1, num_days + 1):
+            date_key = f"{year:04d}-{month:02d}-{day:02d}"
+            label = f"{month_abbr} {day:02d}"
+            inc = float(daily_inc.get(day, 0.0))
+            exp = float(daily_exp.get(day, 0.0))
+            net = inc - exp
+            cum_savings += net
+
+            trend_data.append({
+                "month_key": date_key,
+                "month_label": label,
+                "day_number": day,
+                "total_days": num_days,
+                "income": round(inc, 2),
+                "expense": round(exp, 2),
+                "net_savings": round(net, 2),
+                "cumulative_savings": round(cum_savings, 2),
+                "savings_rate": round((net / inc * 100), 2) if inc > 0 else 0.0,
+                "mom_expense_growth_pct": 0.0
+            })
+
+        return trend_data
+
+    # Case 2: "This Week" -> Show 7 days (Monday to Sunday)
+    elif time_filter == 'week':
+        if start_date:
+            try:
+                base_dt = datetime.strptime(start_date, '%Y-%m-%d')
+            except Exception:
+                base_dt = df['date_dt'].min()
+        else:
+            base_dt = df['date_dt'].min()
+
+        trend_data = []
+        cum_savings = 0.0
+
+        for i in range(7):
+            curr_dt = base_dt + timedelta(days=i)
+            d_key = curr_dt.strftime('%Y-%m-%d')
+            d_label = curr_dt.strftime('%a, %b %d')
+            day_df = df[df['date_dt'].dt.strftime('%Y-%m-%d') == d_key]
+            inc = float(day_df[day_df['type'] == 'Income']['amount'].sum()) if not day_df.empty else 0.0
+            exp = float(day_df[day_df['type'] == 'Expense']['amount'].sum()) if not day_df.empty else 0.0
+            net = inc - exp
+            cum_savings += net
+
+            trend_data.append({
+                "month_key": d_key,
+                "month_label": d_label,
+                "income": round(inc, 2),
+                "expense": round(exp, 2),
+                "net_savings": round(net, 2),
+                "cumulative_savings": round(cum_savings, 2),
+                "savings_rate": round((net / inc * 100), 2) if inc > 0 else 0.0,
+                "mom_expense_growth_pct": 0.0
+            })
+
+        return trend_data
+
+    # Case 3: Multiple months (All Time, This Quarter, This Year) -> Group by Month
     trend_data = []
     cum_savings = 0.0
     prev_expense = None

@@ -58,7 +58,8 @@ export default function DashboardView({
   onEditTransaction,
   onDeleteTransaction,
   breakdownType,
-  setBreakdownType
+  setBreakdownType,
+  timeFilter = 'all'
 }) {
   const [displayMode, setDisplayMode] = useState('amount'); // 'amount' or 'percentage'
 
@@ -101,11 +102,12 @@ export default function DashboardView({
     }
   };
 
-  // Prepare Spline Area Monthly Cash Flow Chart Data
+  // Prepare Spline Area Cash Flow Chart Data
   const trendLabels = (monthlyTrends || []).map(m => m.month_label);
   const incomeData = (monthlyTrends || []).map(m => m.income);
   const expenseData = (monthlyTrends || []).map(m => m.expense);
   const netSavingsData = (monthlyTrends || []).map(m => m.net_savings);
+  const isDenseTrend = (monthlyTrends || []).length > 15;
 
   const cashFlowChartData = {
     labels: trendLabels,
@@ -115,10 +117,10 @@ export default function DashboardView({
         data: incomeData,
         borderColor: '#10b981',
         backgroundColor: 'rgba(16, 185, 129, 0.12)',
-        tension: 0.4,
+        tension: 0.35,
         fill: true,
         pointBackgroundColor: '#10b981',
-        pointRadius: 4,
+        pointRadius: isDenseTrend ? 2.5 : 4,
         pointHoverRadius: 6,
       },
       {
@@ -126,10 +128,10 @@ export default function DashboardView({
         data: expenseData,
         borderColor: '#ef4444',
         backgroundColor: 'rgba(239, 68, 68, 0.08)',
-        tension: 0.4,
+        tension: 0.35,
         fill: true,
         pointBackgroundColor: '#ef4444',
-        pointRadius: 4,
+        pointRadius: isDenseTrend ? 2.5 : 4,
         pointHoverRadius: 6,
       },
       {
@@ -140,7 +142,7 @@ export default function DashboardView({
         backgroundColor: 'transparent',
         tension: 0.3,
         pointBackgroundColor: '#0284c7',
-        pointRadius: 3,
+        pointRadius: isDenseTrend ? 2 : 3,
       }
     ]
   };
@@ -168,7 +170,12 @@ export default function DashboardView({
     scales: {
       x: {
         grid: { display: false },
-        ticks: { font: { family: 'Poppins', size: 11 } }
+        ticks: { 
+          font: { family: 'Poppins', size: 10 },
+          maxRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: isDenseTrend ? 11 : 8
+        }
       },
       y: {
         grid: { color: 'rgba(226, 232, 240, 0.6)' },
@@ -254,9 +261,21 @@ export default function DashboardView({
                 <span className="p-2 rounded-xl bg-brand-50 text-brand-700">
                   <TrendingUp className="w-4 h-4" />
                 </span>
-                <h3 className="text-base font-bold text-slate-800">Monthly Cash Flow Trajectory</h3>
+                <h3 className="text-base font-bold text-slate-800">
+                  {timeFilter === 'month' 
+                    ? 'Daily Cash Flow Trajectory (This Month)' 
+                    : timeFilter === 'week'
+                    ? 'Daily Cash Flow Trajectory (This Week)'
+                    : 'Monthly Cash Flow Trajectory'}
+                </h3>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">Historical comparison of Inflows, Outflows, and Net Savings reserve</p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                {timeFilter === 'month'
+                  ? 'Day-by-day comparison of daily Inflows, Outflows, and Net Savings reserve'
+                  : timeFilter === 'week'
+                  ? 'Day-by-day comparison of weekly Inflows, Outflows, and Net Savings'
+                  : 'Historical comparison of Inflows, Outflows, and Net Savings reserve'}
+              </p>
             </div>
             <div className="flex items-center space-x-2 text-xs font-semibold text-slate-500">
               <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
@@ -272,8 +291,12 @@ export default function DashboardView({
 
           <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 text-center">
             <div className="p-2 rounded-xl bg-slate-50">
-              <span className="text-[11px] font-medium text-slate-500">Monthly Avg Spend</span>
-              <p className="text-sm font-bold text-slate-800 mt-0.5">{formatCurrency(summary.monthly_avg_expense, currency)}</p>
+              <span className="text-[11px] font-medium text-slate-500">
+                {timeFilter === 'month' ? 'Daily Avg Spend' : 'Monthly Avg Spend'}
+              </span>
+              <p className="text-sm font-bold text-slate-800 mt-0.5">
+                {formatCurrency(timeFilter === 'month' ? summary.daily_avg_expense : summary.monthly_avg_expense, currency)}
+              </p>
             </div>
             <div className="p-2 rounded-xl bg-slate-50">
               <span className="text-[11px] font-medium text-slate-500">Income / Expense Ratio</span>

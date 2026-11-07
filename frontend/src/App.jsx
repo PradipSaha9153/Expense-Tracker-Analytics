@@ -58,7 +58,9 @@ export default function App() {
     }
     if (filter === 'month') {
       const start = `${y}-${String(m + 1).padStart(2, '0')}-01`;
-      return { start_date: start };
+      const lastDay = new Date(y, m + 1, 0).getDate();
+      const end = `${y}-${String(m + 1).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+      return { start_date: start, end_date: end };
     }
     if (filter === 'quarter') {
       const qStartMonth = Math.floor(m / 3) * 3;
@@ -81,7 +83,7 @@ export default function App() {
       const [sumRes, catRes, trendRes, txRes, metaRes] = await Promise.all([
         api.getSummary(dateParams),
         api.getCategoriesBreakdown({ ...dateParams, type: breakdownType }),
-        api.getMonthlyTrends(dateParams),
+        api.getMonthlyTrends({ ...dateParams, time_filter: timeFilter }),
         api.getTransactions({ ...dateParams, limit: 12 }),
         api.getCategories()
       ]);

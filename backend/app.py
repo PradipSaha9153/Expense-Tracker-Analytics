@@ -221,8 +221,11 @@ def get_monthly_trends():
     if request.method == 'OPTIONS':
         return make_response(), 200
 
+    time_filter = request.args.get('time_filter')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
     df = get_filtered_df(request.args)
-    trends = analytics.compute_monthly_trends(df)
+    trends = analytics.compute_monthly_trends(df, time_filter=time_filter, start_date=start_date, end_date=end_date)
     return jsonify(trends)
 
 @app.route('/api/analytics/predictive-forecast', methods=['GET', 'OPTIONS'])
