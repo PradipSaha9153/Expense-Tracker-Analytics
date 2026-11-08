@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, make_response, send_from_directory
 import pandas as pd
-import sqlite3
 import os
 import io
 import csv

@@ -3,15 +3,7 @@ import {
   Layers, 
   Calendar, 
   BarChart2, 
-  Clock, 
-  Sparkles, 
-  TrendingUp, 
-  Flame, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  CalendarDays,
-  CheckCircle2,
-  AlertCircle
+  Clock 
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';

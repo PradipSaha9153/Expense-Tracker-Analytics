@@ -7,8 +7,7 @@ import {
   Trash2, 
   Edit2, 
   Filter, 
-  RefreshCw,
-  ArrowUpDown
+  ArrowUpDown 
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';

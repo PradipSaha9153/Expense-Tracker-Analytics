@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
-  Sparkles, 
   X, 
   Send, 
   Bot, 
@@ -12,13 +11,7 @@ import {
   Check, 
   Volume2, 
   VolumeX,
-  MessageSquare,
-  TrendingDown,
-  PieChart,
-  ShieldAlert,
-  HelpCircle,
-  Flame,
-  ArrowUpRight
+  MessageSquare
 } from 'lucide-react';
 import { api } from '../services/api';
 import RobotAvatar from './RobotAvatar';

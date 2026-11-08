@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, 
-  TrendingUp, 
   AlertTriangle, 
   Target, 
   Calendar, 
-  Sliders, 
   CreditCard, 
-  Activity,
-  Layers,
-  ArrowUpRight,
-  ShieldAlert,
-  Percent,
-  CheckCircle2,
-  Info
+  Activity, 
+  ShieldAlert, 
+  Info 
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';

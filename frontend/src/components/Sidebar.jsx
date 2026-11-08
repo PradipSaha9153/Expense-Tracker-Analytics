@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import xpenzicIcon from '../assets/xpenzic-icon.jpg';
 import xpenzicWordmark from '../assets/xpenzic-wordmark.png';
 import { 
-  TrendingUp, 
   BarChart3, 
   Sparkles, 
   Layers, 

@@ -3,13 +3,8 @@ import {
   Calendar as CalendarIcon, 
   ChevronLeft, 
   ChevronRight, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  Wallet, 
   Filter, 
-  Edit2, 
-  Trash2,
-  Plus
+  Trash2 
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';

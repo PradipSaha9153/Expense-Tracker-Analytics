@@ -8,12 +8,9 @@ import {
   Hourglass, 
   PieChart as PieIcon, 
   TrendingUp, 
-  ChevronRight,
-  Plus,
-  Trash2,
-  Edit2,
-  CreditCard,
-  DollarSign
+  Plus, 
+  Trash2, 
+  Edit2 
 } from 'lucide-react';
 import KpiCard from '../components/KpiCard';
 import { CategoryBadge, CategoryIcon } from '../components/CategoryIcon';

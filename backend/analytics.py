@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import calendar
-import math
 
 def get_empty_summary():
     return {

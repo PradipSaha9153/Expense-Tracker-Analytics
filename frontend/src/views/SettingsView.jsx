@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Sliders, 
-  Coins, 
   Database, 
   Trash2, 
-  RefreshCw, 
-  ShieldAlert, 
-  CheckCircle, 
-  ExternalLink,
-  Save,
-  Check
+  Save, 
+  Check 
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';

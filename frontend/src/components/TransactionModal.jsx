@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, ArrowDownLeft, ArrowUpRight, DollarSign, Calendar, Clock, CreditCard, Tag, FileText } from 'lucide-react';
+import { X, ArrowDownLeft, ArrowUpRight, Tag } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from './CategoryIcon';
 

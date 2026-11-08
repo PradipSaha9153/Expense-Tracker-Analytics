@@ -2,8 +2,7 @@ import React from 'react';
 import { 
   Menu, 
   Coins, 
-  PlusCircle, 
-  Calendar 
+  PlusCircle 
 } from 'lucide-react';
 
 export default function TopHeader({ 
