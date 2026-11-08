@@ -6,7 +6,7 @@
 
 ## 📊 Project Overview & Core Data Analysis Pillars
 
-This project converts the transactional and categorical foundation of the Spendrym mobile expense tracker into an enterprise-grade **Financial Data Science & Visualization Platform** designed for deep economic insights, pattern discovery, and predictive forecasting.
+This project converts the transactional and categorical foundation of the Spendrym mobile expense tracker into an enterprise-grade **Financial Data Science & Visualization Platform** designed for deep economic insights, pattern discovery, predictive forecasting, and conversational financial intelligence.
 
 ### 🔬 Implemented Data Science & Analytics Algorithms:
 1. **Ordinary Least Squares (OLS) Time-Series Regression**:
@@ -26,6 +26,10 @@ This project converts the transactional and categorical foundation of the Spendr
    - Calculates 10th percentile (Conservative / Bear), 50th percentile (Expected Median), and 90th percentile (Optimistic / Bull) balance trajectories and an overall **Solvency Probability Score**.
 6. **365-Day Daily Spending Density Heatmap Matrix**:
    - GitHub-style interactive density matrix mapping daily transaction frequency and cash outflow intensity.
+7. **Conversational Financial Intelligence & Affordability Simulator**:
+   - Heuristic NLP engine answering complex natural language queries about expenses, budgets, savings rates, and burn velocity.
+   - **Interactive Affordability Engine**: Computes post-purchase net reserve impact and emergency runway compression (`Safe`, `Moderate`, or `Caution Advised`).
+   - Automated spending sink diagnostics identifying primary cost drivers and projecting savings from 10% reductions.
 
 ---
 
@@ -33,12 +37,15 @@ This project converts the transactional and categorical foundation of the Spendr
 
 | Layer | Technologies | Purpose |
 |---|---|---|
-| **Backend & Analytics** | **Python 3.15**, **Flask**, **Pandas**, **NumPy**, **Scikit-Learn**, **SciPy** | REST API endpoints, statistical modeling, OLS regression, anomaly detection, Monte Carlo engine |
+| **Backend & Analytics** | **Python 3.15**, **Flask**, **Pandas**, **NumPy**, **Scikit-Learn**, **SciPy** | REST API endpoints, statistical modeling, OLS regression, anomaly detection, Monte Carlo simulation engine |
+| **Conversational Intelligence**| **Heuristic NLP Engine** (`backend/assistant.py`) | Natural language parsing, affordability simulation, contextual budget advice, runway impact analysis |
 | **Database** | **SQLite 3** | ACID relational storage for transactions, category hierarchies, and monthly budgets |
 | **Frontend Framework** | **React 18** (Vite 6 Bundler) | Single Page Application (SPA), responsive state management, modular component architecture |
-| **Styling & Design System**| **Tailwind CSS 3.4** | Modern emerald/teal glassmorphism, responsive grid, bespoke Spendrym tokens |
+| **Styling & Design System**| **Tailwind CSS 3.4** | Modern emerald/teal glassmorphism, responsive grid, liquid gradient animations |
 | **Visualization Engine**| **Chart.js 4.4**, **React-Chartjs-2** | Spline area gradients, interactive donuts with center annotations, dual-axis Pareto charts, confidence bands |
+| **Voice Synthesis (TTS)** | **Web Speech API** (`SpeechSynthesis`) | Natural male voice synthesis engine with calibrated pitch/rate and spoken currency pronunciation |
 | **Icons & Typography** | **Lucide React**, **Google Poppins** | Consistent aesthetic mirroring the Spendrym mobile application |
+| **Bespoke UI Assets** | **3D Green Swamp Fluids Cursor**, **3D Robot Mascot** | Custom-calibrated 24px cursor pack and reactive SVG OLED robot avatar |
 
 ---
 
@@ -47,40 +54,51 @@ This project converts the transactional and categorical foundation of the Spendr
 ```text
 Expance-Tracker/
 ├── backend/
-│   ├── app.py               # Flask REST API server with CORS & SPA static hosting
-│   ├── analytics.py         # Advanced statistical, regression, anomaly & Monte Carlo algorithms
-│   ├── database.py          # SQLite schema & category taxonomy initialization
-│   ├── seed_data.py         # Realistic 6-month transaction generator with statistical outliers
-│   ├── test_analytics.py    # Analytical test suite & verification harness
-│   └── requirements.txt     # Python library specifications
+│   ├── app.py                  # Flask REST API server with CORS & SPA static hosting
+│   ├── analytics.py            # Advanced statistical, regression, anomaly & Monte Carlo algorithms
+│   ├── assistant.py            # Financial AI assistant engine (NLP, affordability, budget advice)
+│   ├── database.py             # SQLite schema & category taxonomy initialization
+│   ├── seed_data.py            # Realistic 6-month transaction generator with statistical outliers
+│   ├── tracker.db              # SQLite relational database storage
+│   └── requirements.txt        # Python library specifications
 ├── frontend/
-│   ├── index.html           # HTML entry point with Google Poppins fonts
-│   ├── vite.config.js       # Vite configuration with /api reverse proxy
-│   ├── tailwind.config.js   # Tailwind custom color palette and typography
-│   ├── package.json         # NPM scripts and dependencies
-│   ├── src/
-│   │   ├── main.jsx         # React DOM root mounting
-│   │   ├── App.jsx          # Top-level state, navigation tabs, and modal controls
-│   │   ├── index.css        # Tailwind directives and custom scrollbars
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx           # App bar, period filters, currency switcher, quick actions
-│   │   │   ├── KpiCard.jsx          # Metric cards with trends, icons, and status badges
-│   │   │   └── TransactionModal.jsx # Add/Edit modal with quick increments and method selectors
-│   │   ├── views/
-│   │   │   ├── DashboardView.jsx       # Executive summary, monthly cash flow spline, donut breakdown
-│   │   │   ├── AnalyticsStudioView.jsx # OLS regression, Pareto 80/20, Anomaly detection, Monte Carlo
-│   │   │   ├── VisualizationsView.jsx  # 365-day calendar heatmap matrix, Budget variance waterfall
-│   │   │   ├── CalendarView.jsx        # Day-by-day calendar timeline matching Spendrym Android
-│   │   │   ├── TransactionsView.jsx    # Filterable ledger with live search & CSV export
-│   │   │   └── SettingsView.jsx        # Budget limits, dataset seed/reset, architecture specs
-│   │   ├── services/
-│   │   │   └── api.js                  # Frontend REST API client
-│   │   └── utils/
-│   │       └── formatters.js           # Multi-currency formatting, dates, category colors
-├── start.bat                # 1-Click launcher starting both Backend & Frontend
-├── run_backend.bat          # Standalone Python backend runner
-├── run_frontend.bat         # Standalone Vite React frontend runner
-└── README.md                # Comprehensive documentation
+│   ├── index.html              # HTML entry point with Google Poppins fonts
+│   ├── vite.config.js          # Vite configuration with /api reverse proxy
+│   ├── tailwind.config.js      # Tailwind custom color palette and typography
+│   ├── package.json            # NPM scripts and dependencies
+│   ├── public/                 # Static assets, icons, and custom cursors
+│   │   ├── custom-cursor.png   # 3D Green Swamp fluid arrow cursor (24px)
+│   │   ├── custom-cursor-pointer.png # 3D Green Swamp fluid pointer hand (24px)
+│   │   ├── favicon.png         # Browser favicon
+│   │   └── xpenzic-wordmark.png# Official brand logo
+│   └── src/
+│       ├── main.jsx            # React DOM root mounting
+│       ├── App.jsx             # Top-level state, navigation tabs, and modal controls
+│       ├── index.css           # Tailwind directives, custom scrollbars, and keyframe animations
+│       ├── components/
+│       │   ├── Sidebar.jsx             # Collapsible left navigation sidebar with active tab indicators
+│       │   ├── TopHeader.jsx           # Header bar with period filters, currency switcher, and Ask AI trigger
+│       │   ├── FinancialAssistant.jsx  # Liquid-glass AI drawer with male voice synthesis & circling laser border
+│       │   ├── RobotAvatar.jsx         # 3D desktop robot avatar with animated OLED eyes (idle, think, speak, happy)
+│       │   ├── KpiCard.jsx             # Metric cards with trends, icons, and status badges
+│       │   ├── CategoryIcon.jsx        # Category taxonomy icon component matching Spendrym colors
+│       │   ├── TransactionModal.jsx    # Add/Edit modal with quick increments and method selectors
+│       │   └── ErrorBoundary.jsx       # React runtime error boundary
+│       ├── views/
+│       │   ├── DashboardView.jsx       # Executive summary, monthly cash flow spline, donut breakdown
+│       │   ├── AnalyticsStudioView.jsx # OLS regression, Pareto 80/20, Anomaly detection, Monte Carlo
+│       │   ├── VisualizationsView.jsx  # 365-day calendar heatmap matrix, Budget variance waterfall
+│       │   ├── CalendarView.jsx        # Day-by-day calendar timeline matching Spendrym Android
+│       │   ├── TransactionsView.jsx    # Filterable ledger with live search & CSV export
+│       │   └── SettingsView.jsx        # Budget limits, dataset seed/reset, architecture specs
+│       ├── services/
+│       │   └── api.js                  # Frontend REST API client
+│       └── utils/
+│           └── formatters.js           # Multi-currency formatting, dates, category colors
+├── start.bat                   # 1-Click launcher starting both Backend & Frontend
+├── run_backend.bat             # Standalone Python backend runner
+├── run_frontend.bat            # Standalone Vite React frontend runner
+└── README.md                   # Comprehensive documentation
 ```
 
 ---
@@ -108,7 +126,10 @@ python app.py
 ```
 *The backend automatically initializes `tracker.db` and populates 500+ realistic transactions spanning 6 months if the database is fresh.*
 
-#### 2. Start React Frontend
+> [!NOTE]
+> Since the frontend is pre-built into `frontend/dist`, running `python app.py` alone also serves the complete, production-ready web application directly at **`http://localhost:5000`** with no Node.js runtime required!
+
+#### 2. Start React Frontend (Development Mode)
 In a separate terminal:
 ```powershell
 cd frontend
@@ -152,7 +173,41 @@ Open **`http://localhost:3000`** in your browser.
 
 6. **Budget & Settings (`SettingsView`)**:
    - Real-time monthly budget limit editor per category.
-   - Currency switcher (₹ INR, $ USD, € EUR, £ GBP).
+   - Currency switcher (₹ INR, $ USD, € EUR, £ GBP, ¥ JPY, ₫ VND).
    - One-click **Seed Demo Data** (reloads 6 months of realistic transactions).
    - One-click **Purge Records** (clears database).
 
+7. **Financial AI Intelligence & Voice Assistant (`FinancialAssistant` & `RobotAvatar`)**:
+   - **Liquid Glass Floating Drawer**: Frosted backdrop blur (32px) with animated liquid gradient blobs and a continuous $360^\circ$ circulating green laser border beam.
+   - **Interactive 3D Robot Avatar**: Scalable glossy desktop robot mascot with an obsidian OLED screen visor and expressive cyan LED eyes (`idle` blinks, `thinking`, `speaking`, `happy`, `love`, `money`).
+   - **Natural Male Voice Synthesis**: Real-time Web Speech audio readout with calibrated pitch (`0.95`), rate (`1.0`), and spoken currency formatting.
+   - **Intelligent Financial Queries**:
+     - *Affordability Simulator*: Evaluates purchases (e.g. *"Can I afford ₹15,000?"*) and models runway reduction.
+     - *Spending Diagnostics*: Analyzes top money sinks (e.g. *"Where is my money going mostly?"*).
+     - *Category Deep Dives*: Answers specific queries for Food, Shopping, Transport, Utilities, etc.
+     - *Budget Variance Alerts*: Warns of category overruns and recommends savings targets.
+
+---
+
+## 📡 REST API Reference
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/health` | `GET` | Service status, application version, and health check |
+| `/api/transactions` | `GET`, `POST` | Retrieve filtered transaction ledger or record a new transaction |
+| `/api/transactions/<id>` | `PUT`, `DELETE` | Update or remove an existing transaction record |
+| `/api/transactions/seed` | `POST` | Populate database with 6 months of realistic demonstration data |
+| `/api/transactions/reset` | `POST` | Clear all transaction records from the database |
+| `/api/analytics/summary` | `GET` | Core KPIs: Income, Expense, Net, Savings Rate, Burn Rate, Runway |
+| `/api/analytics/categories` | `GET` | Category-wise expense/income aggregation and percentage distributions |
+| `/api/analytics/monthly-trends` | `GET` | Month-by-month cash flow and cumulative reserve trends |
+| `/api/analytics/predictive-forecast` | `GET` | OLS regression forecast for 30 days with 95% Confidence Interval |
+| `/api/analytics/anomalies` | `GET` | Statistical outlier detection (Modified Z-score & IQR criteria) |
+| `/api/analytics/pareto` | `GET` | Pareto 80/20 cumulative distribution across spending categories |
+| `/api/analytics/behavioral` | `GET` | Weekend vs weekday elasticity and day-of-week intensity metrics |
+| `/api/analytics/heatmap` | `GET` | 365-day daily cash outflow density matrix |
+| `/api/analytics/monte-carlo` | `GET` | 500-run stochastic runway simulation over 180-day horizon |
+| `/api/assistant/chat` | `POST` | Financial AI Assistant query endpoint with natural language responses |
+| `/api/categories` | `GET` | List all system categories and Spendrym taxonomy hierarchies |
+| `/api/budgets` | `GET`, `POST` | Retrieve monthly budget limits or update category allocation |
+| `/api/export/csv` | `GET` | Export current transaction ledger directly to downloadable CSV |
