@@ -1,5 +1,4 @@
 import sqlite3
-import random
 from datetime import datetime, timedelta
 from database import get_db, init_db
 
@@ -12,223 +11,103 @@ def seed_database(clear_first=True):
         cursor.execute("DELETE FROM transactions")
         conn.commit()
 
-    # Determine reference date: Current real date
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=180) # 6 months of data
-
-    transactions = []
-
-    # Monthly fixed events (1st to 28th of each month)
-    curr_month_start = datetime(start_date.year, start_date.month, 1)
+    now = datetime.now()
+    y = now.year
+    m = now.month
     
-    while curr_month_start <= end_date:
-        y, m = curr_month_start.year, curr_month_start.month
+    curr_m_str = f"{y:04d}-{m:02d}"
+    last_m_year = y if m > 1 else y - 1
+    last_m_month = m - 1 if m > 1 else 12
+    last_m_str = f"{last_m_year:04d}-{last_m_month:02d}"
+
+    today_str = now.strftime('%Y-%m-%d')
+    yesterday_str = (now - timedelta(days=1)).strftime('%Y-%m-%d')
+    days_ago_2 = (now - timedelta(days=2)).strftime('%Y-%m-%d')
+    days_ago_3 = (now - timedelta(days=3)).strftime('%Y-%m-%d')
+    days_ago_4 = (now - timedelta(days=4)).strftime('%Y-%m-%d')
+    days_ago_6 = (now - timedelta(days=6)).strftime('%Y-%m-%d')
+
+    test_transactions = [
+        # ==========================================
+        # 2025 TRANSACTIONS (Visible only in "All Time")
+        # ==========================================
+        ('Income', 75000.0, 'Salary', 'Salary', 'Monthly Professional Salary (2025)', '2025-03-01', '09:30', 'Bank'),
+        ('Expense', 20000.0, 'Home', 'Mortgage & Rent', 'Apartment Rent (2025)', '2025-03-03', '10:00', 'Bank'),
+        ('Expense', 4200.0, 'Food & Beverages', 'Food', 'Monthly Grocery Provisions', '2025-03-15', '18:30', 'UPI'),
         
-        # 1. Salary on the 1st
-        salary_dt = datetime(y, m, 1)
-        if salary_dt <= end_date:
-            transactions.append((
-                'Income', 
-                95000.0 + random.choice([0, 5000, 8000]), 
-                'Salary', 
-                'Salary', 
-                'Monthly Professional Salary (Senior Engineer)', 
-                salary_dt.strftime('%Y-%m-%d'), 
-                '09:30', 
-                'Bank'
-            ))
+        ('Income', 75000.0, 'Salary', 'Salary', 'Monthly Professional Salary (2025)', '2025-06-01', '09:30', 'Bank'),
+        ('Expense', 32000.0, 'Shopping', 'Electronic Devices', 'Ergonomic Desk & Monitor Setup', '2025-06-18', '16:00', 'Card'),
+        
+        ('Income', 75000.0, 'Salary', 'Salary', 'Monthly Professional Salary (2025)', '2025-08-01', '09:30', 'Bank'),
+        ('Income', 30000.0, 'Bonus', 'Bonus', 'Mid-Year Performance Incentive', '2025-08-15', '11:00', 'Bank'),
+        ('Expense', 18500.0, 'Entertainment', 'Travel', 'Summer Vacation Flights & Hotel', '2025-08-20', '14:20', 'Card'),
 
-        # 2. Quarterly / Bi-monthly bonus or freelance
-        if m in [2, 5, 8, 11]:
-            side_day = min(random.randint(12, 22), 28)
-            side_dt = datetime(y, m, side_day)
-            if side_dt <= end_date:
-                transactions.append((
-                    'Income',
-                    random.randint(18000, 35000),
-                    'Side job',
-                    'Freelance',
-                    'UI/UX Consulting & Data Pipeline Contract',
-                    side_dt.strftime('%Y-%m-%d'),
-                    '18:45',
-                    'Bank'
-                ))
+        ('Income', 75000.0, 'Salary', 'Salary', 'Monthly Professional Salary (2025)', '2025-11-01', '09:30', 'Bank'),
+        ('Expense', 20000.0, 'Home', 'Mortgage & Rent', 'Apartment Rent (2025)', '2025-11-03', '10:00', 'Bank'),
+        ('Expense', 2800.0, 'Food & Beverages', 'Restaurant', 'Team Dinner & Celebration', '2025-11-20', '20:15', 'Card'),
+        ('Expense', 5600.0, 'Gifts & Donations', 'GiftsExpense', 'Holiday Festival Gifts & Family Shopping', '2025-12-24', '15:45', 'UPI'),
 
-        # 3. Monthly Investment dividend / return
-        if random.random() > 0.2:
-            inv_day = min(random.randint(5, 18), 28)
-            inv_dt = datetime(y, m, inv_day)
-            if inv_dt <= end_date:
-                transactions.append((
-                    'Income',
-                    random.randint(5500, 14000),
-                    'InvestmentIncome',
-                    'Investment',
-                    'Mutual Fund SIP Dividend & Stock Payout',
-                    inv_dt.strftime('%Y-%m-%d'),
-                    '11:15',
-                    'Bank'
-                ))
+        # ==========================================
+        # 2026 - Q1 (January - March) (Visible in "This Year" and "All Time")
+        # ==========================================
+        ('Income', 85000.0, 'Salary', 'Salary', 'Monthly Professional Salary', f"{y}-01-01", '09:30', 'Bank'),
+        ('Expense', 22000.0, 'Home', 'Mortgage & Rent', 'Apartment Monthly Rent', f"{y}-01-03", '10:00', 'Bank'),
+        ('Expense', 12000.0, 'Health', 'Sports', 'Annual Fitness Club Membership', f"{y}-01-18", '11:00', 'Card'),
+        ('Expense', 4500.0, 'Shopping', 'Accessories', 'Wristwatch & Accessories', f"{y}-02-14", '19:30', 'Card'),
 
-        # 4. Rent on the 3rd
-        rent_dt = datetime(y, m, 3)
-        if rent_dt <= end_date:
-            transactions.append((
-                'Expense',
-                22000.0,
-                'Home',
-                'Mortgage & Rent',
-                'Apartment Rent Payment',
-                rent_dt.strftime('%Y-%m-%d'),
-                '10:00',
-                'Bank'
-            ))
+        # ==========================================
+        # 2026 - Q2 (April - June) (Visible in "This Year" and "All Time")
+        # ==========================================
+        ('Income', 85000.0, 'Salary', 'Salary', 'Monthly Professional Salary', f"{y}-04-01", '09:30', 'Bank'),
+        ('Expense', 22000.0, 'Home', 'Mortgage & Rent', 'Apartment Monthly Rent', f"{y}-04-03", '10:00', 'Bank'),
+        ('Expense', 3500.0, 'Home', 'Home Services', 'Air Conditioning Service & Maintenance', f"{y}-04-20", '14:00', 'UPI'),
+        ('Income', 18000.0, 'Side job', 'Freelance', 'Design & Frontend Consulting Contract', f"{y}-05-15", '17:30', 'Bank'),
+        ('Expense', 6800.0, 'Shopping', 'Clothes', 'Summer Apparel & Footwear', f"{y}-05-25", '18:15', 'Card'),
 
-        # 5. Utilities around the 10th-16th
-        if datetime(y, m, 11) <= end_date:
-            transactions.append((
-                'Expense',
-                random.randint(2200, 3600),
-                'Utility Bills',
-                'Electricity',
-                'State Electricity Board Bill',
-                datetime(y, m, 11).strftime('%Y-%m-%d'),
-                '14:20',
-                'UPI'
-            ))
-        if datetime(y, m, 14) <= end_date:
-            transactions.append((
-                'Expense',
-                random.randint(999, 1499),
-                'Utility Bills',
-                'Internet',
-                'Fiber High-Speed Broadband (Airtel/Jio)',
-                datetime(y, m, 14).strftime('%Y-%m-%d'),
-                '16:05',
-                'UPI'
-            ))
-        if datetime(y, m, 16) <= end_date:
-            transactions.append((
-                'Expense',
-                random.randint(499, 899),
-                'Utility Bills',
-                'Mobile Phone',
-                'Postpaid Mobile Recharge',
-                datetime(y, m, 16).strftime('%Y-%m-%d'),
-                '12:30',
-                'UPI'
-            ))
+        # ==========================================
+        # 2026 - Q3 (July - September) (Visible in "This Year" and "All Time")
+        # ==========================================
+        ('Income', 85000.0, 'Salary', 'Salary', 'Monthly Professional Salary', f"{y}-07-01", '09:30', 'Bank'),
+        ('Expense', 22000.0, 'Home', 'Mortgage & Rent', 'Apartment Monthly Rent', f"{y}-07-03", '10:00', 'Bank'),
+        ('Income', 25000.0, 'Bonus', 'Bonus', 'Q3 Performance Incentive Bonus', f"{y}-08-15", '11:00', 'Bank'),
+        ('Expense', 14200.0, 'Entertainment', 'Travel', 'Monsoon Hill Station Retreat', f"{y}-08-22", '12:00', 'Card'),
+        ('Expense', 8900.0, 'Transport', 'Services & Maintenance', 'Comprehensive Vehicle Insurance', f"{y}-09-10", '16:00', 'Bank'),
 
-        # Next month calculation
-        if m == 12:
-            curr_month_start = datetime(y + 1, 1, 1)
-        else:
-            curr_month_start = datetime(y, m + 1, 1)
+        # ==========================================
+        # 2026 - Q4 (October - November) (Visible in "This Quarter", "This Year", and "All Time")
+        # ==========================================
+        # October 2026
+        ('Income', 85000.0, 'Salary', 'Salary', 'Monthly Professional Salary', f"{last_m_str}-01", '09:30', 'Bank'),
+        ('Income', 12000.0, 'InvestmentIncome', 'Investment', 'Mutual Fund Dividends', f"{last_m_str}-15", '11:00', 'Bank'),
+        ('Expense', 22000.0, 'Home', 'Mortgage & Rent', 'Apartment Monthly Rent', f"{last_m_str}-02", '10:00', 'Bank'),
+        ('Expense', 8500.0, 'Shopping', 'Electronic Devices', 'Wireless ANC Headphones', f"{last_m_str}-10", '15:00', 'Card'),
+        ('Expense', 5400.0, 'Food & Beverages', 'Food', 'Monthly Grocery Provisions', f"{last_m_str}-15", '19:00', 'UPI'),
+        ('Expense', 3200.0, 'Transport', 'Fuel', 'Petrol Refill & Highway Tolls', f"{last_m_str}-22", '09:00', 'Card'),
+        ('Expense', 2100.0, 'Food & Beverages', 'Restaurant', 'Weekend Family Dinner', f"{last_m_str}-28", '20:30', 'Card'),
 
-    # Daily variable transactions
-    curr_day = start_date
-    daily_food_options = [
-        ('Food & Beverages', 'Food', 'Office Lunch & Thali', (180, 420), 'UPI'),
-        ('Food & Beverages', 'Beverages', 'Artisan Coffee & Chai break', (80, 250), 'UPI'),
-        ('Food & Beverages', 'Restaurant', 'Dinner with Colleagues', (650, 1850), 'Card'),
-        ('Food & Beverages', 'Daily Necessities', 'Supermarket Dairy, Fruits & Essentials', (450, 1600), 'UPI'),
-        ('Transport', 'Fuel', 'Petrol station refill', (500, 1500), 'UPI'),
-        ('Transport', 'Taxi', 'Uber / Ola Cab Ride', (180, 550), 'UPI'),
-        ('Transport', 'Parking', 'Metro & Mall Parking Fee', (40, 120), 'UPI'),
+        # November 2026 (Current Month, Days 01-08)
+        ('Income', 85000.0, 'Salary', 'Salary', 'Monthly Professional Salary', f"{curr_m_str}-01", '09:30', 'Bank'),
+        ('Income', 22000.0, 'Side job', 'Freelance', 'Consulting & Freelance Project', f"{curr_m_str}-05", '17:00', 'Bank'),
+        ('Expense', 22000.0, 'Home', 'Mortgage & Rent', 'Apartment Monthly Rent', f"{curr_m_str}-01", '10:00', 'Bank'),
+        ('Expense', 3450.0, 'Food & Beverages', 'Daily Necessities', 'Supermarket Grocery & Dairy', days_ago_6, '18:30', 'UPI'),
+        ('Expense', 2180.0, 'Utility Bills', 'Electricity', 'Monthly Electricity Bill', days_ago_4, '11:15', 'UPI'),
+        ('Expense', 1800.0, 'Transport', 'Fuel', 'Vehicle Petrol Refill', days_ago_3, '08:45', 'UPI'),
+        ('Expense', 1250.0, 'Food & Beverages', 'Restaurant', 'Team Lunch with Colleagues', days_ago_3, '13:30', 'Card'),
+        ('Expense', 1199.0, 'Utility Bills', 'Internet', 'High-Speed Fiber Broadband', days_ago_2, '16:20', 'UPI'),
+        ('Expense', 4200.0, 'Shopping', 'Clothes', 'Winter Jacket & Apparel', yesterday_str, '17:40', 'Card'),
+        ('Expense', 950.0, 'Entertainment', 'Movies', 'Cinema Tickets & Popcorn', yesterday_str, '20:15', 'Card'),
+        ('Expense', 620.0, 'Health', 'Medicine', 'Prescription Pharmacy Meds', today_str, '10:15', 'UPI'),
+        ('Expense', 340.0, 'Food & Beverages', 'Beverages', 'Artisan Coffee & Pastry', today_str, '12:30', 'UPI')
     ]
 
-    weekend_options = [
-        ('Entertainment', 'Movies', 'IMAX Cinema Tickets & Popcorn', (500, 1200), 'Card'),
-        ('Entertainment', 'Games', 'Steam Game & Arcade Passes', (499, 1499), 'Card'),
-        ('Shopping', 'Clothes', 'Casual Wear & Footwear', (1200, 3800), 'Card'),
-        ('Food & Beverages', 'Restaurant', 'Weekend Fine Dining & Lounge', (1100, 2600), 'Card'),
-        ('Shopping', 'Accessories', 'Smartwatch band & sunglasses', (600, 1800), 'UPI'),
-        ('Home', 'Furnishings', 'Home Decor & Plants', (800, 2200), 'Card'),
-    ]
-
-    occasional_health_personal = [
-        ('Health', 'Doctor', 'Annual Health Physician Consultation', (800, 2000), 'UPI'),
-        ('Health', 'Medicine', 'Prescription Pharmacy Meds', (350, 1400), 'UPI'),
-        ('Personal Development', 'Education', 'Coursera / Udemy Specialization Course', (1299, 3999), 'Card'),
-        ('Personal Development', 'Business', 'Cloud Hosting & Domain Renewals', (1500, 4500), 'Card'),
-        ('Gifts & Donations', 'GiftsExpense', 'Birthday Gift for Friend', (1000, 3500), 'UPI'),
-        ('Gifts & Donations', 'Charity', 'Monthly NGO & Animal Shelter Donation', (500, 2000), 'UPI'),
-    ]
-
-    while curr_day <= end_date:
-        day_str = curr_day.strftime('%Y-%m-%d')
-        is_weekend = curr_day.weekday() >= 5 # 5=Sat, 6=Sun
-
-        # 1-3 daily expenses on weekdays, 2-5 on weekends
-        num_items = random.randint(2, 5) if is_weekend else random.randint(1, 3)
-
-        for _ in range(num_items):
-            pool = weekend_options if is_weekend and random.random() > 0.4 else daily_food_options
-            cat, subcat, desc, (min_amt, max_amt), def_method = random.choice(pool)
-            
-            amt = round(random.uniform(min_amt, max_amt), 2)
-            
-            # Weighted payment method
-            r = random.random()
-            if r < 0.60:
-                method = 'UPI'
-            elif r < 0.85:
-                method = 'Card'
-            elif r < 0.95:
-                method = 'Cash'
-            else:
-                method = 'Wallet'
-
-            hour = random.randint(8, 22)
-            minute = random.choice([0, 15, 30, 45, random.randint(10, 59)])
-            time_str = f"{hour:02d}:{minute:02d}"
-
-            transactions.append((
-                'Expense',
-                amt,
-                cat,
-                subcat,
-                desc,
-                day_str,
-                time_str,
-                method
-            ))
-
-        # Occasional health/personal events
-        if random.random() < 0.08:
-            cat, subcat, desc, (min_amt, max_amt), def_method = random.choice(occasional_health_personal)
-            amt = round(random.uniform(min_amt, max_amt), 2)
-            transactions.append((
-                'Expense',
-                amt,
-                cat,
-                subcat,
-                desc,
-                day_str,
-                '15:30',
-                def_method
-            ))
-
-        curr_day += timedelta(days=1)
-
-    # Add deliberate statistical ANOMALIES to showcase Anomaly Detection algorithms!
-    anomalies = [
-        ('Expense', 58999.0, 'Shopping', 'Electronic Devices', 'MacBook Air M2 Purchase (Major Outlier)', (end_date - timedelta(days=120)).strftime('%Y-%m-%d'), '19:40', 'Card'),
-        ('Expense', 28500.0, 'Entertainment', 'Travel', 'Flight Bookings to Goa & Resort Stay', (end_date - timedelta(days=75)).strftime('%Y-%m-%d'), '11:20', 'Card'),
-        ('Expense', 19800.0, 'Health', 'Doctor', 'Comprehensive Dental Surgery & Diagnostics', (end_date - timedelta(days=35)).strftime('%Y-%m-%d'), '15:10', 'Card'),
-        ('Income', 45000.0, 'Bonus', 'Bonus', 'Annual Performance Incentive Bonus Payout', (end_date - timedelta(days=60)).strftime('%Y-%m-%d'), '16:00', 'Bank')
-    ]
-    transactions.extend(anomalies)
-
-    # Insert all transactions in bulk
     cursor.executemany('''
     INSERT INTO transactions (type, amount, category, subcategory, description, date, time, payment_method)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', transactions)
+    ''', test_transactions)
 
     conn.commit()
     conn.close()
-    print(f"Seeded {len(transactions)} realistic transactions spanning 6 months.")
+    print(f"Successfully seeded database with {len(test_transactions)} transactions spanning 2025 and all 4 quarters of 2026.")
 
 if __name__ == '__main__':
     seed_database()

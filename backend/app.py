@@ -181,7 +181,7 @@ def seed_data():
         return make_response(), 200
 
     seed_database(clear_first=True)
-    return jsonify({"status": "seeded", "message": "6 months of realistic transaction data seeded successfully."})
+    return jsonify({"status": "seeded", "message": "Demo transaction data (2025 & 2026) loaded successfully."})
 
 @app.route('/api/transactions/reset', methods=['POST', 'OPTIONS'])
 def reset_data():

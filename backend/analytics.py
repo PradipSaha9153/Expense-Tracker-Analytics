@@ -157,8 +157,49 @@ def compute_monthly_trends(df, time_filter=None, start_date=None, end_date=None)
 
     months = sorted(df['month_year'].unique())
 
+    # Case 0: "Today" -> Show timeline across today's hours
+    if time_filter == 'today':
+        target_date = start_date or datetime.now().strftime('%Y-%m-%d')
+        day_df = df[df['date'] == target_date] if not df.empty else df
+
+        slots = [
+            ("08:00", "00:00", "08:00"),
+            ("11:00", "08:01", "11:00"),
+            ("14:00", "11:01", "14:00"),
+            ("17:00", "14:01", "17:00"),
+            ("20:00", "17:01", "20:00"),
+            ("23:00", "20:01", "23:59")
+        ]
+        trend_data = []
+        cum_savings = 0.0
+
+        for label, start_t, end_t in slots:
+            if not day_df.empty:
+                slot_df = day_df[(day_df['time'] >= start_t) & (day_df['time'] <= end_t)]
+                inc = float(slot_df[slot_df['type'] == 'Income']['amount'].sum()) if not slot_df.empty else 0.0
+                exp = float(slot_df[slot_df['type'] == 'Expense']['amount'].sum()) if not slot_df.empty else 0.0
+            else:
+                inc = 0.0
+                exp = 0.0
+
+            net = inc - exp
+            cum_savings += net
+
+            trend_data.append({
+                "month_key": f"{target_date} {label}",
+                "month_label": label,
+                "income": round(inc, 2),
+                "expense": round(exp, 2),
+                "net_savings": round(net, 2),
+                "cumulative_savings": round(cum_savings, 2),
+                "savings_rate": round((net / inc * 100), 2) if inc > 0 else 0.0,
+                "mom_expense_growth_pct": 0.0
+            })
+
+        return trend_data
+
     # Case 1: "This Month" selected OR dataset contains only 1 single month -> Show 28, 29, 30, or 31 days!
-    if time_filter == 'month' or len(months) == 1:
+    if time_filter == 'month' or (len(months) == 1 and not time_filter):
         if start_date:
             try:
                 s_dt = datetime.strptime(start_date, '%Y-%m-%d')

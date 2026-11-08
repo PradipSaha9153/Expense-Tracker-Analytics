@@ -7,7 +7,7 @@ import {
   Sparkles, 
   Layers, 
   CalendarDays, 
-  ReceiptText, 
+  ArrowLeftRight, 
   Sliders, 
   Activity,
   X
@@ -29,7 +29,7 @@ export default function Sidebar({
     { id: 'analytics', label: 'Deep Analytics Studio', icon: Sparkles },
     { id: 'visualizations', label: 'Visualizations Hub', icon: Layers },
     { id: 'calendar', label: 'Calendar Timeline', icon: CalendarDays },
-    { id: 'transactions', label: 'Transaction Ledger', icon: ReceiptText },
+    { id: 'transactions', label: 'Transaction Ledger', icon: ArrowLeftRight },
     { id: 'settings', label: 'Budget & Control', icon: Sliders },
   ];
 
@@ -120,7 +120,7 @@ export default function Sidebar({
               </p>
             </div>
 
-            <nav className="space-y-1.5">
+            <nav className="space-y-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -128,19 +128,22 @@ export default function Sidebar({
                   <button
                     key={tab.id}
                     onClick={() => handleTabClick(tab.id)}
-                    className={`group relative flex items-center rounded-2xl transition-all duration-200 ${
+                    className={`group relative flex items-center rounded-2xl transition-all duration-200 select-none ${
                       isExpanded 
-                        ? 'w-full px-3.5 py-3 space-x-3 justify-start' 
+                        ? 'w-full px-4 py-3 space-x-3 justify-start' 
                         : 'w-12 h-12 justify-center mx-auto'
                     } ${
                       isActive
-                        ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-md shadow-brand-700/25 font-bold'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold'
+                        ? 'bg-gradient-to-r from-[#34D399] via-[#10B981] to-[#059669] text-white shadow-[0_8px_24px_-4px_rgba(16,185,129,0.55),0_2px_8px_rgba(16,185,129,0.35)] border border-white/40 shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.7)] font-bold'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-medium'
                     }`}
                   >
-                    <Icon className={`w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${
-                      isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'
-                    }`} />
+                    <Icon 
+                      className={`w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-105 ${
+                        isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'
+                      }`}
+                      strokeWidth={2.4}
+                    />
                     
                     {/* Navigation Label revealed on hover */}
                     <span className={`text-xs whitespace-nowrap transition-all duration-200 ${

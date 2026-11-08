@@ -262,19 +262,31 @@ export default function DashboardView({
                   <TrendingUp className="w-4 h-4" />
                 </span>
                 <h3 className="text-base font-bold text-slate-800">
-                  {timeFilter === 'month' 
-                    ? 'Daily Cash Flow Trajectory (This Month)' 
+                  {timeFilter === 'today'
+                    ? "Today's Cash Flow Trajectory"
                     : timeFilter === 'week'
-                    ? 'Daily Cash Flow Trajectory (This Week)'
-                    : 'Monthly Cash Flow Trajectory'}
+                    ? 'Weekly Cash Flow Trajectory (This Week)'
+                    : timeFilter === 'month' 
+                    ? 'Daily Cash Flow Trajectory (This Month)' 
+                    : timeFilter === 'quarter'
+                    ? 'Quarterly Cash Flow Trajectory (This Quarter)'
+                    : timeFilter === 'year'
+                    ? 'Annual Cash Flow Trajectory (This Year)'
+                    : 'All-Time Cash Flow Trajectory'}
                 </h3>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {timeFilter === 'month'
-                  ? 'Day-by-day comparison of daily Inflows, Outflows, and Net Savings reserve'
+                {timeFilter === 'today'
+                  ? "Timeline of today's Inflows, Outflows, and Net Savings progression"
                   : timeFilter === 'week'
                   ? 'Day-by-day comparison of weekly Inflows, Outflows, and Net Savings'
-                  : 'Historical comparison of Inflows, Outflows, and Net Savings reserve'}
+                  : timeFilter === 'month'
+                  ? 'Day-by-day comparison of daily Inflows, Outflows, and Net Savings across the month'
+                  : timeFilter === 'quarter'
+                  ? 'Monthly cash flow comparison for the current quarter'
+                  : timeFilter === 'year'
+                  ? 'Month-by-month cash flow trajectory across the current year'
+                  : 'Historical multi-year comparison of Inflows, Outflows, and Net Savings reserve'}
               </p>
             </div>
             <div className="flex items-center space-x-2 text-xs font-semibold text-slate-500">
@@ -292,10 +304,21 @@ export default function DashboardView({
           <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 text-center">
             <div className="p-2 rounded-xl bg-slate-50">
               <span className="text-[11px] font-medium text-slate-500">
-                {timeFilter === 'month' ? 'Daily Avg Spend' : 'Monthly Avg Spend'}
+                {timeFilter === 'today' 
+                  ? "Today's Total Spend" 
+                  : (timeFilter === 'week' || timeFilter === 'month')
+                  ? 'Daily Avg Spend' 
+                  : 'Monthly Avg Spend'}
               </span>
               <p className="text-sm font-bold text-slate-800 mt-0.5">
-                {formatCurrency(timeFilter === 'month' ? summary.daily_avg_expense : summary.monthly_avg_expense, currency)}
+                {formatCurrency(
+                  timeFilter === 'today'
+                    ? summary.total_expense
+                    : (timeFilter === 'month' || timeFilter === 'week') 
+                    ? summary.daily_avg_expense 
+                    : summary.monthly_avg_expense, 
+                  currency
+                )}
               </p>
             </div>
             <div className="p-2 rounded-xl bg-slate-50">

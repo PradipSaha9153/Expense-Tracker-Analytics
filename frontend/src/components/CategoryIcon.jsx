@@ -179,47 +179,35 @@ export function CategoryIcon({ category, className = "w-4 h-4", ...props }) {
   return <IconComponent className={className} {...props} />;
 }
 
-export function CategoryBadge({ category, size = "md", use3D = true, className = "", style = {} }) {
-  const [imgError, setImgError] = useState(false);
-  const icon3DPath = get3DIconPath(category);
+export function CategoryBadge({ category, size = "md", className = "", style = {} }) {
+  const IconComponent = getCategoryIcon(category);
   const catColor = getCategoryColor(category);
 
   const sizeClasses = {
-    xs: { box: "w-7 h-7", icon: "w-6 h-6", fallbackBox: "w-5 h-5 rounded-md", fallbackIcon: "w-3 h-3" },
-    sm: { box: "w-8 h-8", icon: "w-7 h-7", fallbackBox: "w-7 h-7 rounded-lg", fallbackIcon: "w-3.5 h-3.5" },
-    md: { box: "w-10 h-10", icon: "w-9 h-9", fallbackBox: "w-8 h-8 rounded-xl", fallbackIcon: "w-4 h-4" },
-    lg: { box: "w-13 h-13 sm:w-14 sm:h-14", icon: "w-12 h-12 sm:w-13 sm:h-13", fallbackBox: "w-10 h-10 rounded-xl", fallbackIcon: "w-5 h-5" },
-    xl: { box: "w-16 h-16", icon: "w-14 h-14", fallbackBox: "w-12 h-12 rounded-2xl", fallbackIcon: "w-6 h-6" }
+    xs: { box: "w-6 h-6 rounded-lg", icon: "w-3.5 h-3.5" },
+    sm: { box: "w-8 h-8 rounded-xl", icon: "w-4 h-4" },
+    md: { box: "w-9 h-9 sm:w-10 sm:h-10 rounded-xl", icon: "w-4.5 h-4.5 sm:w-5 sm:h-5" },
+    lg: { box: "w-12 h-12 rounded-2xl", icon: "w-6 h-6" },
+    xl: { box: "w-14 h-14 rounded-2xl", icon: "w-7 h-7" }
   };
 
   const selectedSize = sizeClasses[size] || sizeClasses.md;
 
-  if (use3D && icon3DPath && !imgError) {
-    return (
-      <div
-        className={`${selectedSize.box} flex items-center justify-center shrink-0 transition-transform duration-200 hover:scale-110 select-none ${className}`}
-        style={style}
-        title={category}
-      >
-        <img
-          src={icon3DPath}
-          alt={category}
-          onError={() => setImgError(true)}
-          className={`${selectedSize.icon} object-contain pointer-events-none`}
-          loading="lazy"
-        />
-      </div>
-    );
-  }
-
-  // Fallback to flat badge if 3D icon fails to load
   return (
     <div
-      className={`${selectedSize.fallbackBox} flex items-center justify-center font-bold text-white shrink-0 ${className}`}
-      style={{ backgroundColor: catColor, ...style }}
+      className={`${selectedSize.box} flex items-center justify-center shrink-0 border transition-all duration-200 select-none hover:scale-105 shadow-xs ${className}`}
+      style={{
+        backgroundColor: `${catColor}14`,
+        borderColor: `${catColor}35`,
+        ...style
+      }}
       title={category}
     >
-      <CategoryIcon category={category} className={`${selectedSize.fallbackIcon} text-white`} />
+      <IconComponent 
+        className={`${selectedSize.icon} transition-transform duration-200`} 
+        style={{ color: catColor }} 
+        strokeWidth={2.4} 
+      />
     </div>
   );
 }

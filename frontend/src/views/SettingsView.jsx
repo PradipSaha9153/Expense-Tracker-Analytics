@@ -7,7 +7,6 @@ import {
   RefreshCw, 
   ShieldAlert, 
   CheckCircle, 
-  Code2, 
   ExternalLink,
   Save,
   Check
@@ -184,38 +183,6 @@ export default function SettingsView({ currency, setCurrency, onSeedData, onRese
               </button>
             </div>
             <Trash2 className="w-8 h-8 text-rose-600/30" />
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Project Architecture & Machine Learning Specifications */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
-        <div className="flex items-center space-x-2 mb-3">
-          <Code2 className="w-4 h-4 text-brand-600" />
-          <h3 className="text-base font-bold text-slate-800">Data Analytics Project Specifications</h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Backend Architecture</h4>
-            <ul className="space-y-1.5 text-slate-600">
-              <li>• <span className="font-semibold text-slate-800">Framework:</span> Python 3.15 + Flask REST API</li>
-              <li>• <span className="font-semibold text-slate-800">Data Engine:</span> Pandas & NumPy time-series aggregations</li>
-              <li>• <span className="font-semibold text-slate-800">Predictive ML:</span> Ordinary Least Squares (OLS) Linear Regression</li>
-              <li>• <span className="font-semibold text-slate-800">Anomaly Detection:</span> Modified Z-Scores & Interquartile Range (IQR)</li>
-              <li>• <span className="font-semibold text-slate-800">Database:</span> SQLite3 with ACID compliance</li>
-            </ul>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-            <h4 className="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Frontend Stack</h4>
-            <ul className="space-y-1.5 text-slate-600">
-              <li>• <span className="font-semibold text-slate-800">UI Library:</span> React 18 + Vite Bundler</li>
-              <li>• <span className="font-semibold text-slate-800">Styling:</span> Tailwind CSS 3.4 with custom Emerald palette</li>
-              <li>• <span className="font-semibold text-slate-800">Charts Engine:</span> Chart.js + React-Chartjs-2</li>
-              <li>• <span className="font-semibold text-slate-800">Design System:</span> Inspired by Spendrym Mobile App</li>
-              <li>• <span className="font-semibold text-slate-800">Icons:</span> Lucide Icons</li>
-            </ul>
           </div>
         </div>
       </div>

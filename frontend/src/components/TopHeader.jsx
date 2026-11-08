@@ -47,20 +47,23 @@ export default function TopHeader({
         </button>
 
         {/* Time Period Filter Pills on LEFT SIDE */}
-        <div className="flex items-center bg-slate-100/90 p-1 rounded-xl text-xs font-medium text-slate-600 whitespace-nowrap overflow-x-auto scrollbar-none">
-          {periods.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setTimeFilter(p.id)}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
-                timeFilter === p.id 
-                  ? 'bg-white text-brand-700 font-bold shadow-xs' 
-                  : 'hover:text-slate-900'
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-medium text-slate-600 whitespace-nowrap overflow-x-auto scrollbar-none border border-slate-200/60">
+          {periods.map((p) => {
+            const isSelected = timeFilter === p.id;
+            return (
+              <button
+                key={p.id}
+                onClick={() => setTimeFilter(p.id)}
+                className={`px-3 py-1.5 rounded-lg transition-all duration-200 select-none ${
+                  isSelected 
+                    ? 'bg-gradient-to-r from-emerald-600 to-brand-700 text-white font-bold shadow-md shadow-emerald-700/25 scale-[1.02]' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 font-semibold'
+                }`}
+              >
+                {p.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
