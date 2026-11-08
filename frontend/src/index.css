@@ -8,6 +8,36 @@
   }
 }
 
+/* ========================================================
+   Green Swamp Fluids Custom 3D Cursor Pack
+   ======================================================== */
+html, body {
+  cursor: url('/custom-cursor.png') 3 0, auto;
+}
+
+/* Interactive elements use Green Swamp Fluids Hand Pointer */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"],
+select,
+summary,
+.cursor-pointer {
+  cursor: url('/custom-cursor-pointer.png') 10 0, pointer !important;
+}
+
+/* Text fields keep precise text cursor */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+input[type="date"],
+textarea {
+  cursor: text;
+}
+
 /* Custom Glassmorphism & Shadow utilities */
 .glass-card {
   background: rgba(255, 255, 255, 0.95);
@@ -39,4 +69,78 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* ========================================================
+   Liquid Glass Assistant Keyframes & Effects
+   ======================================================== */
+@keyframes liquidBlob1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  }
+  33% {
+    transform: translate(35px, -25px) scale(1.15) rotate(45deg);
+    border-radius: 58% 42% 40% 60% / 55% 30% 70% 45%;
+  }
+  66% {
+    transform: translate(-25px, 30px) scale(0.92) rotate(-30deg);
+    border-radius: 35% 65% 50% 50% / 40% 60% 40% 60%;
+  }
+}
+
+@keyframes liquidBlob2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  33% {
+    transform: translate(-40px, 25px) scale(1.12) rotate(-40deg);
+    border-radius: 40% 60% 60% 40% / 40% 50% 50% 60%;
+  }
+  66% {
+    transform: translate(30px, -35px) scale(0.95) rotate(35deg);
+    border-radius: 70% 30% 50% 50% / 30% 70% 30% 70%;
+  }
+}
+
+@keyframes liquidBlob3 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(20px, 20px) scale(1.22);
+    opacity: 0.75;
+  }
+}
+
+.liquid-glass-container {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.58) 0%,
+    rgba(255, 255, 255, 0.28) 45%,
+    rgba(236, 253, 245, 0.42) 100%
+  );
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 25px 65px -15px rgba(0, 45, 35, 0.22),
+    0 0 50px 4px rgba(16, 185, 129, 0.28),
+    inset 0 2px 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.liquid-blob-1 {
+  animation: liquidBlob1 18s ease-in-out infinite alternate;
+}
+
+.liquid-blob-2 {
+  animation: liquidBlob2 22s ease-in-out infinite alternate;
+}
+
+.liquid-blob-3 {
+  animation: liquidBlob3 14s ease-in-out infinite alternate;
+}
+
 
