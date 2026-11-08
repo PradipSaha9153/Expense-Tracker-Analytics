@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 ======================================================================
   Xpenzic • One-Click Setup & Launch System
