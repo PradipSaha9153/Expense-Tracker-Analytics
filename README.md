@@ -95,7 +95,8 @@ Expance-Tracker/
 │       │   └── api.js                  # Frontend REST API client
 │       └── utils/
 │           └── formatters.js           # Multi-currency formatting, dates, category colors
-├── start.bat                   # 1-Click launcher starting both Backend & Frontend
+├── run.py                      # 1-Click Python installer, dependency manager & app runner
+├── start.bat                   # 1-Click launcher starting both Backend & Frontend (Dev mode)
 ├── run_backend.bat             # Standalone Python backend runner
 ├── run_frontend.bat            # Standalone Vite React frontend runner
 └── README.md                   # Comprehensive documentation
@@ -105,14 +106,30 @@ Expance-Tracker/
 
 ## 🚀 How to Run the Application
 
-### Option A: One-Click Startup (Recommended for Windows)
-Simply double-click:
+### Option A: 1-Click Python Auto-Installer & Runner (Recommended)
+Simply run:
+```powershell
+python run.py
+```
+*Or double-click **`run.py`** in Windows Explorer!*
+
+**What `run.py` does automatically:**
+1. 🔍 Checks your Python environment for all required data science libraries (`Flask`, `pandas`, `numpy`, `scikit-learn`, `scipy`, `python-dateutil`).
+2. 📦 Automatically downloads and installs any missing packages via `pip`.
+3. 🎨 Verifies that the production frontend build is ready.
+4. 🚀 Launches the full-stack server at **`http://localhost:5000`**.
+5. 🌐 Automatically opens your default web browser to the dashboard!
+
+---
+
+### Option B: 1-Click Batch Launcher (Windows Dev Mode)
+Double-click:
 ```bat
 start.bat
 ```
-This automatically starts:
+This starts:
 - **Backend API**: `http://localhost:5000`
-- **Frontend UI**: `http://localhost:3000`
+- **Frontend Vite Dev Server**: `http://localhost:3000`
 
 ---
 
