@@ -316,12 +316,11 @@ export default function FinancialAssistant({ currency = '₹', timeFilter = 'all
             {/* Inner Pill Button */}
             <button
               onClick={() => setIsOpen(true)}
-              className="group relative flex items-center space-x-3 pl-3 pr-4 py-2.5 rounded-full bg-white/95 hover:bg-white backdrop-blur-2xl transition-all duration-300"
+              className="group relative flex items-center space-x-3 pl-3 pr-5 py-2.5 rounded-full bg-white/95 hover:bg-white backdrop-blur-2xl transition-all duration-300"
             >
               {/* Cute Miniature Desktop Robot Head */}
               <div className="relative group-hover:-translate-y-0.5 transition-transform duration-300">
                 <RobotAvatar size="sm" mood="idle" currency={currency} />
-                <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white shadow-xs" />
               </div>
 
               <div className="text-left">
@@ -330,11 +329,6 @@ export default function FinancialAssistant({ currency = '₹', timeFilter = 'all
                 </span>
                 <span className="block text-[10px] text-slate-500 font-medium">Click to chat</span>
               </div>
-
-              <span className="relative flex h-2.5 w-2.5 ml-1">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-xs" />
-              </span>
             </button>
           </div>
         </div>
@@ -387,7 +381,6 @@ export default function FinancialAssistant({ currency = '₹', timeFilter = 'all
                   mood={loading ? "thinking" : speakingId ? "speaking" : "idle"} 
                   currency={currency}
                 />
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-brand-900 shadow-xs animate-pulse" />
               </div>
 
               <div>
@@ -395,8 +388,7 @@ export default function FinancialAssistant({ currency = '₹', timeFilter = 'all
                   <span>Xpenzic AI Assistant</span>
                   <span className="px-1.5 py-0.2 rounded-md bg-white/20 text-[9px] font-extrabold uppercase tracking-wider text-emerald-200">Live</span>
                 </h3>
-                <p className="text-[10px] text-teal-100/90 font-medium flex items-center gap-1.5">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <p className="text-[10px] text-teal-100/90 font-medium">
                   <span className="text-emerald-200 font-semibold">
                     {loading ? "Analyzing ledger..." : speakingId ? "Reading aloud..." : "Online & Synchronized"}
                   </span>

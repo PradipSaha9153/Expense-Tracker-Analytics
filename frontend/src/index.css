@@ -9,10 +9,10 @@
 }
 
 /* ========================================================
-   Green Swamp Fluids Custom 3D Cursor Pack
+   Green Swamp Fluids Custom 3D Cursor Pack (Compact 24px)
    ======================================================== */
 html, body {
-  cursor: url('/custom-cursor.png') 3 0, auto;
+  cursor: url('/custom-cursor.png') 2 0, auto;
 }
 
 /* Interactive elements use Green Swamp Fluids Hand Pointer */
@@ -25,7 +25,7 @@ input[type="reset"],
 select,
 summary,
 .cursor-pointer {
-  cursor: url('/custom-cursor-pointer.png') 10 0, pointer !important;
+  cursor: url('/custom-cursor-pointer.png') 7 0, pointer !important;
 }
 
 /* Text fields keep precise text cursor */
