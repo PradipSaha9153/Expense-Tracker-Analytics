@@ -54,6 +54,47 @@ textarea {
   box-shadow: 0 18px 35px -5px rgba(0, 87, 74, 0.09), 0 8px 10px -4px rgba(0, 0, 0, 0.03);
 }
 
+/* ========================================================
+   Circling Green Border Beam for Assistant Pill
+   ======================================================== */
+@keyframes circleBeamSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.circling-green-beam {
+  animation: circleBeamSpin 2.4s linear infinite;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 140deg,
+    rgba(16, 185, 129, 0.2) 200deg,
+    rgba(16, 185, 129, 0.6) 260deg,
+    #10b981 310deg,
+    #34d399 340deg,
+    #6ee7b7 355deg,
+    #ffffff 360deg
+  );
+}
+
+.circling-green-beam-glow {
+  animation: circleBeamSpin 2.4s linear infinite;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 180deg,
+    rgba(16, 185, 129, 0.3) 240deg,
+    #10b981 300deg,
+    #34d399 340deg,
+    #a7f3d0 360deg
+  );
+  filter: blur(10px);
+}
+
 /* Custom modern scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

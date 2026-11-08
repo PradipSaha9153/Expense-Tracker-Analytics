@@ -305,34 +305,38 @@ export default function FinancialAssistant({ currency = '₹', timeFilter = 'all
 
   return (
     <>
-      {/* 1. Liquid Glass Floating Trigger Pill (Bottom-Right) with Desktop Robot Head */}
+      {/* 1. Floating Trigger Pill with Continuously Circling Green Border Beam */}
       {!isOpen && (
         <div className="fixed bottom-6 right-6 z-40">
-          <button
-            onClick={() => setIsOpen(true)}
-            className="group relative flex items-center space-x-3 pl-3 pr-4 py-2.5 rounded-full bg-white/75 hover:bg-white/95 backdrop-blur-2xl border border-white/90 shadow-[0_12px_36px_rgba(0,40,30,0.15),0_0_28px_rgba(16,185,129,0.3),inset_0_1px_1px_rgba(255,255,255,0.9)] hover:scale-105 active:scale-95 transition-all duration-300 ring-1 ring-white/60 overflow-hidden"
-          >
-            {/* Liquid specular glass reflection */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/15 via-teal-400/10 to-transparent pointer-events-none" />
+          {/* Circling Green Border Wrapper */}
+          <div className="relative p-[2.5px] rounded-full overflow-hidden shadow-[0_12px_36px_rgba(0,40,30,0.18),0_0_28px_rgba(16,185,129,0.45)] hover:scale-105 active:scale-95 transition-all duration-300">
+            {/* Spinning Conic Laser Beam that continuously circles the perimeter */}
+            <div className="absolute -inset-[200%] circling-green-beam pointer-events-none" />
 
-            {/* Cute Miniature Desktop Robot Head */}
-            <div className="relative group-hover:-translate-y-0.5 transition-transform duration-300">
-              <RobotAvatar size="sm" mood="idle" currency={currency} />
-              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white shadow-xs" />
-            </div>
+            {/* Inner Pill Button */}
+            <button
+              onClick={() => setIsOpen(true)}
+              className="group relative flex items-center space-x-3 pl-3 pr-4 py-2.5 rounded-full bg-white/95 hover:bg-white backdrop-blur-2xl transition-all duration-300"
+            >
+              {/* Cute Miniature Desktop Robot Head */}
+              <div className="relative group-hover:-translate-y-0.5 transition-transform duration-300">
+                <RobotAvatar size="sm" mood="idle" currency={currency} />
+                <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white shadow-xs" />
+              </div>
 
-            <div className="text-left">
-              <span className="block font-bold text-xs text-slate-800 tracking-tight leading-tight group-hover:text-emerald-700 transition-colors">
-                Ask Financial AI
+              <div className="text-left">
+                <span className="block font-bold text-xs text-slate-800 tracking-tight leading-tight group-hover:text-emerald-700 transition-colors">
+                  Ask Financial AI
+                </span>
+                <span className="block text-[10px] text-slate-500 font-medium">Click to chat</span>
+              </div>
+
+              <span className="relative flex h-2.5 w-2.5 ml-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-xs" />
               </span>
-              <span className="block text-[10px] text-slate-500 font-medium">Click to chat</span>
-            </div>
-
-            <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-          </button>
+            </button>
+          </div>
         </div>
       )}
 
