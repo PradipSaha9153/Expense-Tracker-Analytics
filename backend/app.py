@@ -8,6 +8,7 @@ import csv
 from database import get_db, init_db
 from seed_data import seed_database
 import analytics
+import assistant
 
 # Locate frontend dist directory if built
 DIST_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist'))
@@ -287,6 +288,24 @@ def get_monte_carlo():
     df = get_filtered_df(request.args)
     sims = analytics.compute_monte_carlo_runway(df)
     return jsonify(sims)
+
+# ----------------- FINANCIAL ASSISTANT BOT ----------------- #
+
+@app.route('/api/assistant/chat', methods=['POST', 'OPTIONS'])
+def assistant_chat():
+    if request.method == 'OPTIONS':
+        return make_response(), 200
+
+    data = request.get_json() or {}
+    message = data.get('message', '')
+    currency = data.get('currency', '₹')
+    time_filter = data.get('time_filter', 'all')
+
+    reply = assistant.answer_query(message, currency=currency, time_filter=time_filter)
+    return jsonify({
+        "reply": reply,
+        "timestamp": pd.Timestamp.now().strftime('%H:%M')
+    })
 
 # ----------------- CATEGORIES & BUDGETS ----------------- #
 

@@ -8,6 +8,7 @@ import VisualizationsView from './views/VisualizationsView';
 import CalendarView from './views/CalendarView';
 import TransactionsView from './views/TransactionsView';
 import SettingsView from './views/SettingsView';
+import FinancialAssistant from './components/FinancialAssistant';
 
 import { api } from './services/api';
 
@@ -279,6 +280,9 @@ export default function App() {
         categories={categoriesMeta}
         currency={currency}
       />
+
+      {/* Floating Smart Financial Assistant */}
+      <FinancialAssistant currency={currency} timeFilter={timeFilter} />
     </div>
   );
 }

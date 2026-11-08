@@ -2,7 +2,6 @@ import React from 'react';
 import { 
   Menu, 
   Coins, 
-  RefreshCw, 
   PlusCircle, 
   Calendar 
 } from 'lucide-react';
@@ -84,16 +83,6 @@ export default function TopHeader({
             ))}
           </select>
         </div>
-
-        {/* Seed Dataset button */}
-        <button
-          onClick={onSeedData}
-          title="Reload Realistic 6-Month Demo Dataset"
-          className="hidden sm:flex items-center space-x-1 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-brand-500 text-xs font-semibold text-slate-700 hover:text-brand-700 transition"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 text-brand-600 ${isRefreshing ? 'animate-spin' : ''}`} />
-          <span>Seed Data</span>
-        </button>
 
         {/* New Transaction button */}
         <button

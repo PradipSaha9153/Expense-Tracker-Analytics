@@ -19,7 +19,6 @@ export default function SettingsView({ currency, setCurrency, onSeedData, onRese
   const [budgets, setBudgets] = useState([]);
   const [editingBudget, setEditingBudget] = useState({});
   const [savedSuccess, setSavedSuccess] = useState('');
-  const [isSeeding, setIsSeeding] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
 
   const fetchBudgets = async () => {
@@ -48,13 +47,6 @@ export default function SettingsView({ currency, setCurrency, onSeedData, onRese
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const handleSeed = async () => {
-    setIsSeeding(true);
-    await onSeedData();
-    await fetchBudgets();
-    setIsSeeding(false);
   };
 
   const handleReset = async () => {
@@ -141,49 +133,34 @@ export default function SettingsView({ currency, setCurrency, onSeedData, onRese
         </div>
       </div>
 
-      {/* 2. Data Lifecycle Controls (Seed & Reset) */}
+      {/* 2. Transaction Records Management (Purge Records) */}
       <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
-        <h3 className="text-base font-bold text-slate-800 mb-1">Dataset Management & Synchronization</h3>
+        <h3 className="text-base font-bold text-slate-800 mb-1">Transaction Records Management</h3>
         <p className="text-xs text-slate-500 mb-4">
-          Populate realistic demo records to demonstrate ML analytics algorithms, or reset to a blank slate
+          Permanently delete existing transaction records from the database whenever you want to reset and start logging fresh data.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-start justify-between">
+        <div className="p-5 rounded-2xl bg-rose-50/60 border border-rose-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start space-x-3.5">
+            <span className="p-2.5 rounded-xl bg-rose-100 text-rose-600 shrink-0 mt-0.5">
+              <Trash2 className="w-5 h-5" />
+            </span>
             <div>
-              <h4 className="text-xs font-bold text-emerald-900">Seed Multi-Month Demo Data</h4>
-              <p className="text-[11px] text-emerald-700 mt-1 max-w-xs">
-                Generates 500+ realistic multi-month transactions with salaries, rent, groceries, weekend spikes, and statistical outliers.
+              <h4 className="text-sm font-bold text-rose-900">Purge All Transaction Records</h4>
+              <p className="text-xs text-rose-700/90 mt-0.5 max-w-xl">
+                Permanently deletes all expenses and income entries from the SQLite database. Your budgets and category limits remain intact so you can immediately begin recording fresh transactions.
               </p>
-              <button
-                onClick={handleSeed}
-                disabled={isSeeding}
-                className="mt-3 flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs disabled:opacity-50"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 ${isSeeding ? 'animate-spin' : ''}`} />
-                <span>{isSeeding ? 'Seeding...' : 'Populate Demo Dataset'}</span>
-              </button>
             </div>
-            <Database className="w-8 h-8 text-emerald-600/30" />
           </div>
 
-          <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-start justify-between">
-            <div>
-              <h4 className="text-xs font-bold text-rose-900">Purge Transaction Records</h4>
-              <p className="text-[11px] text-rose-700 mt-1 max-w-xs">
-                Permanently clears all transactions from SQLite database to start tracking from scratch.
-              </p>
-              <button
-                onClick={handleReset}
-                disabled={isResetting}
-                className="mt-3 flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-xs disabled:opacity-50"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>{isResetting ? 'Deleting...' : 'Purge All Records'}</span>
-              </button>
-            </div>
-            <Trash2 className="w-8 h-8 text-rose-600/30" />
-          </div>
+          <button
+            onClick={handleReset}
+            disabled={isResetting}
+            className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-sm hover:shadow-md disabled:opacity-50 shrink-0 active:scale-95"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>{isResetting ? 'Deleting...' : 'Purge All Records'}</span>
+          </button>
         </div>
       </div>
     </div>

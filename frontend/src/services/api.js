@@ -132,6 +132,16 @@ export const api = {
   getExportUrl: (params = {}) => {
     const query = new URLSearchParams(params).toString();
     return `${BASE_URL}/export/csv?${query}`;
+  },
+
+  // Financial Assistant
+  askAssistant: async (message, currency = '₹', timeFilter = 'all') => {
+    const res = await fetch(`${BASE_URL}/assistant/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, currency, time_filter: timeFilter })
+    });
+    return res.json();
   }
 };
 
