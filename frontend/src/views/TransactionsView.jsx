@@ -101,7 +101,17 @@ export default function TransactionsView({
             <h2 className="text-xl font-extrabold text-slate-800">Financial Ledger & Data Export</h2>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Complete transaction records with multi-parametric filtering, live search, and CSV export for external Data Analytics
+            {timeFilter === 'today'
+              ? "Displaying ledger entries logged today with multi-parametric filtering, live search, and CSV export"
+              : timeFilter === 'week'
+              ? "Displaying ledger entries logged this week with multi-parametric filtering, live search, and CSV export"
+              : timeFilter === 'month'
+              ? "Displaying ledger entries recorded this month with multi-parametric filtering, live search, and CSV export"
+              : timeFilter === 'quarter'
+              ? "Displaying ledger entries recorded in Q4 with multi-parametric filtering, live search, and CSV export"
+              : timeFilter === 'year'
+              ? "Displaying ledger entries recorded across 2026 with multi-parametric filtering, live search, and CSV export"
+              : "Complete transaction records with multi-parametric filtering, live search, and CSV export for external Data Analytics"}
           </p>
         </div>
 

@@ -66,6 +66,11 @@ def get_filtered_df(request_args):
         query += " AND date <= ?"
         params.append(end_date)
 
+    year_param = request_args.get('year')
+    if year_param:
+        query += " AND strftime('%Y', date) = ?"
+        params.append(str(year_param))
+
     search = request_args.get('search')
     if search:
         query += " AND (description LIKE ? OR category LIKE ? OR subcategory LIKE ?)"

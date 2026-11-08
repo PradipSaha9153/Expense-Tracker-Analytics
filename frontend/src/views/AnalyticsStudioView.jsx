@@ -296,7 +296,17 @@ export default function AnalyticsStudioView({ currency, timeFilter, dateParams }
               <h3 className="text-base font-bold text-slate-800">Time-Series Predictive Spending Forecast</h3>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Linear trend modeling with 95% Confidence Interval error bands (t-distribution)
+              {timeFilter === 'today'
+                ? "Linear trend modeling calibrated on today's cash velocity with 95% Confidence Interval error bands"
+                : timeFilter === 'week'
+                ? "Linear trend modeling calibrated on this week's spending with 95% Confidence Interval error bands"
+                : timeFilter === 'month'
+                ? "Linear trend modeling calibrated on this month's spending with 95% Confidence Interval error bands"
+                : timeFilter === 'quarter'
+                ? "Linear trend modeling calibrated on Q4 spending with 95% Confidence Interval error bands"
+                : timeFilter === 'year'
+                ? "Linear trend modeling calibrated on 2026 spending with 95% Confidence Interval error bands"
+                : "Linear trend modeling with 95% Confidence Interval error bands (t-distribution)"}
             </p>
           </div>
 
@@ -369,7 +379,17 @@ export default function AnalyticsStudioView({ currency, timeFilter, dateParams }
               </span>
             </div>
             <p className="text-xs text-slate-500 mb-4">
-              Identifies the vital 20% of category drivers responsible for 80% of aggregate spending
+              {timeFilter === 'today'
+                ? "Identifies the vital 20% of category drivers responsible for 80% of today's spending"
+                : timeFilter === 'week'
+                ? "Identifies the vital 20% of category drivers responsible for 80% of this week's spending"
+                : timeFilter === 'month'
+                ? "Identifies the vital 20% of category drivers responsible for 80% of this month's aggregate spending"
+                : timeFilter === 'quarter'
+                ? "Identifies the vital 20% of category drivers responsible for 80% of Q4 aggregate spending"
+                : timeFilter === 'year'
+                ? "Identifies the vital 20% of category drivers responsible for 80% of 2026 annual spending"
+                : "Identifies the vital 20% of category drivers responsible for 80% of aggregate spending across all time"}
             </p>
 
             <div className="h-64 w-full">
@@ -406,7 +426,17 @@ export default function AnalyticsStudioView({ currency, timeFilter, dateParams }
               )}
             </div>
             <p className="text-xs text-slate-500 mb-4">
-              Discretionary weekend leisure spikes versus weekday routine living expenses
+              {timeFilter === 'today'
+                ? "Discretionary timing patterns and payment methods utilized today"
+                : timeFilter === 'week'
+                ? "Discretionary spending distribution across this week (Monday through Sunday)"
+                : timeFilter === 'month'
+                ? "Discretionary weekend leisure spikes versus weekday routine expenses across this month"
+                : timeFilter === 'quarter'
+                ? "Discretionary weekend leisure spikes versus weekday routine expenses across Q4"
+                : timeFilter === 'year'
+                ? "Discretionary weekend leisure spikes versus weekday routine living expenses across 2026"
+                : "Discretionary weekend leisure spikes versus weekday routine living expenses across all time"}
             </p>
 
             <div className="h-64 w-full">
@@ -455,7 +485,17 @@ export default function AnalyticsStudioView({ currency, timeFilter, dateParams }
               <h3 className="text-base font-bold text-slate-800">Statistical Anomaly & Outlier Detection</h3>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Identifies transactions exceeding 2.2 standard deviations or above Q3 + 1.5×IQR from historical category averages
+              {timeFilter === 'today'
+                ? "Identifies transactions today exceeding 2.2 standard deviations or IQR bounds"
+                : timeFilter === 'week'
+                ? "Identifies transactions this week exceeding 2.2 standard deviations or IQR bounds"
+                : timeFilter === 'month'
+                ? "Identifies transactions this month exceeding 2.2 standard deviations or IQR bounds"
+                : timeFilter === 'quarter'
+                ? "Identifies transactions in Q4 exceeding 2.2 standard deviations or IQR bounds"
+                : timeFilter === 'year'
+                ? "Identifies transactions across 2026 exceeding 2.2 standard deviations or IQR bounds"
+                : "Identifies transactions exceeding 2.2 standard deviations or above Q3 + 1.5×IQR from historical category averages"}
             </p>
           </div>
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
@@ -522,7 +562,17 @@ export default function AnalyticsStudioView({ currency, timeFilter, dateParams }
                 <h3 className="text-base font-bold text-slate-800">Monte Carlo 180-Day Financial Runway Simulator</h3>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                500 stochastic trials based on empirical cash flow distribution modeling future net balance scenarios
+                {timeFilter === 'today'
+                  ? "500 stochastic trials calibrated on today's run rate modeling future solvency scenarios"
+                  : timeFilter === 'week'
+                  ? "500 stochastic trials calibrated on this week's cash flow distribution modeling future solvency scenarios"
+                  : timeFilter === 'month'
+                  ? "500 stochastic trials calibrated on this month's cash flow distribution modeling future solvency scenarios"
+                  : timeFilter === 'quarter'
+                  ? "500 stochastic trials calibrated on Q4 cash flow distribution modeling future solvency scenarios"
+                  : timeFilter === 'year'
+                  ? "500 stochastic trials calibrated on 2026 annual cash flow distribution modeling future solvency scenarios"
+                  : "500 stochastic trials based on empirical cash flow distribution modeling future net balance scenarios"}
               </p>
             </div>
 

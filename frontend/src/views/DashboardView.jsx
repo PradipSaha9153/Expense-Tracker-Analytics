@@ -194,7 +194,19 @@ export default function DashboardView({
         <KpiCard
           title="Total Income"
           value={formatCurrency(summary.total_income, currency)}
-          subtitle="All inflows"
+          subtitle={
+            timeFilter === 'today'
+              ? "Today's Inflow"
+              : timeFilter === 'week'
+              ? "This Week's Inflow"
+              : timeFilter === 'month'
+              ? "This Month's Inflow"
+              : timeFilter === 'quarter'
+              ? "Q4 Total Inflow"
+              : timeFilter === 'year'
+              ? "Annual Inflow (2026)"
+              : "All inflows recorded"
+          }
           icon={ArrowUpRight}
           color="emerald"
           trend="up"
@@ -204,7 +216,13 @@ export default function DashboardView({
         <KpiCard
           title="Total Outflow"
           value={formatCurrency(summary.total_expense, currency)}
-          subtitle={`Daily avg: ${formatCurrency(summary.daily_avg_expense, currency)}`}
+          subtitle={
+            timeFilter === 'today'
+              ? "Today's Total Spend"
+              : (timeFilter === 'week' || timeFilter === 'month')
+              ? `Daily avg: ${formatCurrency(summary.daily_avg_expense, currency)}`
+              : `Monthly avg: ${formatCurrency(summary.monthly_avg_expense, currency)}`
+          }
           icon={ArrowDownLeft}
           color="rose"
           trend="down"
@@ -438,7 +456,19 @@ export default function DashboardView({
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-800">Category Wise Expense Distribution</h3>
-            <p className="text-xs text-slate-500">Ranked by total spending allocation and relative share</p>
+            <p className="text-xs text-slate-500">
+              {timeFilter === 'today' 
+                ? "Today's category spending allocation and relative share"
+                : timeFilter === 'week'
+                ? "This week's category spending allocation and relative share"
+                : timeFilter === 'month'
+                ? "Monthly category spending allocation across this month"
+                : timeFilter === 'quarter'
+                ? "Quarterly category spending allocation across Q4"
+                : timeFilter === 'year'
+                ? "Annual category spending allocation for 2026"
+                : "Ranked by total spending allocation and relative share across all time"}
+            </p>
           </div>
           <span className="text-xs font-semibold text-brand-700 bg-brand-50 px-3 py-1 rounded-xl">
             {categoriesList.length} Categories Analyzed
@@ -505,7 +535,19 @@ export default function DashboardView({
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-800">Recent Transactions Feed</h3>
-            <p className="text-xs text-slate-500">Live operational ledger records and instant controls</p>
+            <p className="text-xs text-slate-500">
+              {timeFilter === 'today'
+                ? "Operational ledger records logged today with instant controls"
+                : timeFilter === 'week'
+                ? "Operational ledger records logged this week with instant controls"
+                : timeFilter === 'month'
+                ? "Operational ledger records logged this month with instant controls"
+                : timeFilter === 'quarter'
+                ? "Operational ledger records logged in Q4 with instant controls"
+                : timeFilter === 'year'
+                ? "Operational ledger records logged across 2026 with instant controls"
+                : "All-time operational ledger records and instant controls"}
+            </p>
           </div>
           <button
             onClick={onOpenNewTransaction}

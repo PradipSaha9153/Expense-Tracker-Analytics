@@ -44,9 +44,20 @@ export default function App() {
     const y = now.getFullYear();
     const m = now.getMonth();
 
+    if (filter === 'quarter') {
+      const qStartMonth = Math.floor(m / 3) * 3;
+      const start = `${y}-${String(qStartMonth + 1).padStart(2, '0')}-01`;
+      const qEndMonth = qStartMonth + 2;
+      const lastDay = new Date(y, qEndMonth + 1, 0).getDate();
+      const end = `${y}-${String(qEndMonth + 1).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+      return { start_date: start, end_date: end, time_filter: 'quarter' };
+    }
+    if (filter === 'year') {
+      return { start_date: `${y}-01-01`, end_date: `${y}-12-31`, time_filter: 'year' };
+    }
     if (filter === 'today') {
       const todayStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      return { start_date: todayStr, end_date: todayStr };
+      return { start_date: todayStr, end_date: todayStr, time_filter: 'today' };
     }
     if (filter === 'week') {
       const d = new Date(now);
@@ -54,23 +65,15 @@ export default function App() {
       const diff = d.getDate() - day + (day === 0 ? -6 : 1);
       const monday = new Date(d.setDate(diff));
       const start = `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`;
-      return { start_date: start };
+      return { start_date: start, time_filter: 'week' };
     }
     if (filter === 'month') {
       const start = `${y}-${String(m + 1).padStart(2, '0')}-01`;
       const lastDay = new Date(y, m + 1, 0).getDate();
       const end = `${y}-${String(m + 1).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
-      return { start_date: start, end_date: end };
+      return { start_date: start, end_date: end, time_filter: 'month' };
     }
-    if (filter === 'quarter') {
-      const qStartMonth = Math.floor(m / 3) * 3;
-      const start = `${y}-${String(qStartMonth + 1).padStart(2, '0')}-01`;
-      return { start_date: start };
-    }
-    if (filter === 'year') {
-      return { start_date: `${y}-01-01` };
-    }
-    return {};
+    return { time_filter: 'all' };
   };
 
   const activeDateParams = getDateRange(timeFilter);
