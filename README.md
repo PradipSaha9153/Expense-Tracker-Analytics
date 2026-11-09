@@ -2,6 +2,9 @@
 
 > An advanced, full-stack Data Analysis & Financial Intelligence web application built with **Python (Flask, Pandas, NumPy, Scikit-Learn)**, **React 18**, **Tailwind CSS**, and **Chart.js**, inspired by and expanding upon the **Spendrym / MMAS Expense Tracker** Android architecture (`E:\AndroidDev\projects\Expense-Tracker-Application`).
 
+> [!TIP]
+> 📂 **Project Demo, Presentation & Resources**: Access the project demonstration videos, slide decks, and assets on [Google Drive](https://drive.google.com/drive/folders/15a6M1dQTpGw7sZgmjvNIATip7ZuugHgI).
+
 ---
 
 ## 📊 Project Overview & Core Data Analysis Pillars
@@ -228,3 +231,10 @@ Open **`http://localhost:3000`** in your browser.
 | `/api/categories` | `GET` | List all system categories and Spendrym taxonomy hierarchies |
 | `/api/budgets` | `GET`, `POST` | Retrieve monthly budget limits or update category allocation |
 | `/api/export/csv` | `GET` | Export current transaction ledger directly to downloadable CSV |
+
+---
+
+## 📂 Project Resources & Repository
+
+- **GitHub Repository**: [PradipSaha9153/Xpenzic-Smart_Expense-Tracker-Analytics](https://github.com/PradipSaha9153/Xpenzic-Smart_Expense-Tracker-Analytics)
+- **Google Drive (Demo & Slides)**: [Xpenzic Project Files & Resources](https://drive.google.com/drive/folders/15a6M1dQTpGw7sZgmjvNIATip7ZuugHgI)
