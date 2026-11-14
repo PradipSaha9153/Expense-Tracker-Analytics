@@ -8,11 +8,11 @@ import {
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';
-import { formatCurrency, formatDate, getCategoryColor } from '../utils/formatters';
+import { formatCurrency, formatDate, getCategoryColor, formatLocalYMD } from '../utils/formatters';
 
 export default function CalendarView({ currency, onOpenNewTransaction, onEditTransaction, onDeleteTransaction }) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDayStr, setSelectedDayStr] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDayStr, setSelectedDayStr] = useState(formatLocalYMD());
   const [monthTransactions, setMonthTransactions] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
   const [loading, setLoading] = useState(true);

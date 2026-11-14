@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from '../components/CategoryIcon';
-import { formatCurrency, getCategoryColor } from '../utils/formatters';
+import { formatCurrency, getCategoryColor, formatLocalYMD } from '../utils/formatters';
 
 // Chart.js imports
 import {
@@ -23,10 +23,19 @@ import {
 import { Bar } from 'react-chartjs-2';
 
 export default function VisualizationsView({ currency, monthlyTrends = [], timeFilter = 'all', dateParams = {} }) {
+  const nowDate = new Date();
+  const todayObj = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate());
+  const currYear = todayObj.getFullYear();
+  const currMonth = todayObj.getMonth();
+  const todayStr = formatLocalYMD(todayObj);
+  const currMonthFull = todayObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+  const currQuarter = Math.floor(currMonth / 3) + 1;
+
   const [heatmapData, setHeatmapData] = useState({});
   const [budgets, setBudgets] = useState([]);
+  const [todayTxs, setTodayTxs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAllTimeYear, setSelectedAllTimeYear] = useState(2026);
+  const [selectedAllTimeYear, setSelectedAllTimeYear] = useState(currYear);
   const [hoveredCell, setHoveredCell] = useState(null);
 
   useEffect(() => {
@@ -37,12 +46,19 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
         if (timeFilter === 'all') {
           queryParams.year = selectedAllTimeYear;
         }
-        const [hData, bData] = await Promise.all([
+        const reqs = [
           api.getHeatmap(queryParams),
           api.getBudgets()
-        ]);
+        ];
+        if (timeFilter === 'today') {
+          reqs.push(api.getTransactions({ start_date: todayStr, end_date: todayStr, limit: 100 }));
+        }
+        const [hData, bData, tData] = await Promise.all(reqs);
         setHeatmapData(hData || {});
         setBudgets(bData || []);
+        if (tData) {
+          setTodayTxs(tData.data || []);
+        }
       } catch (err) {
         console.error('Failed to load visual data', err);
       } finally {
@@ -50,7 +66,7 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
       }
     };
     fetchData();
-  }, [timeFilter, selectedAllTimeYear, JSON.stringify(dateParams)]);
+  }, [timeFilter, selectedAllTimeYear, todayStr, JSON.stringify(dateParams)]);
 
   // Intensity color map
   const getIntensityClass = (level, isFuture = false) => {
@@ -83,29 +99,29 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
         };
       case 'month':
         return {
-          title: "Monthly Spending Heatmap Matrix (November 2026)",
-          subtitle: "Daily spending intensity and transaction volume across all 30 calendar days of November 2026",
-          cycleBadge: "November 2026 Cycle"
+          title: `Monthly Spending Heatmap Matrix (${currMonthFull})`,
+          subtitle: `Daily spending intensity and transaction volume across all calendar days of ${currMonthFull}`,
+          cycleBadge: `${currMonthFull} Cycle`
         };
       case 'quarter':
         return {
-          title: "Quarterly Spending Heatmap Matrix (Q4: Oct – Dec 2026)",
-          subtitle: "Daily spending distribution and outflow intensity across the 13 weeks of Q4",
-          cycleBadge: "Q4 2026 Fiscal Cycle"
+          title: `Quarterly Spending Heatmap Matrix (Q${currQuarter} ${currYear})`,
+          subtitle: `Daily spending distribution and outflow intensity across the weeks of Q${currQuarter}`,
+          cycleBadge: `Q${currQuarter} ${currYear} Fiscal Cycle`
         };
       case 'year':
         return {
-          title: "Annual Spending Heatmap Matrix (2026 Calendar Year)",
-          subtitle: "Daily cash outflow density and spending spikes across all 52 weeks of 2026",
-          cycleBadge: "Full 2026 Annual Cycle"
+          title: `Annual Spending Heatmap Matrix (${currYear} Calendar Year)`,
+          subtitle: `Daily cash outflow density and spending spikes across all 52 weeks of ${currYear}`,
+          cycleBadge: `Full ${currYear} Annual Cycle`
         };
       case 'all':
       default:
         return {
-          title: selectedAllTimeYear === 2025 
-            ? "All-Time Spending Heatmap Matrix (2025 Historical Archive)" 
-            : "All-Time Spending Heatmap Matrix (2026 Active Ledger)",
-          subtitle: "Historical multi-year daily spending density. Toggle between 2025 and 2026 below.",
+          title: selectedAllTimeYear === currYear - 1
+            ? `All-Time Spending Heatmap Matrix (${currYear - 1} Historical Archive)`
+            : `All-Time Spending Heatmap Matrix (${currYear} Active Ledger)`,
+          subtitle: `Historical multi-year daily spending density. Toggle between ${currYear - 1} and ${currYear} below.`,
           cycleBadge: `All-Time Archive (${selectedAllTimeYear})`
         };
     }
@@ -120,7 +136,7 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
       case 'week': return "Weekly Budget Pace";
       case 'month': return "Current Month Cycle";
       case 'quarter': return "Quarterly Budget Allocation";
-      case 'year': return "Annual 2026 Consumption";
+      case 'year': return `Annual ${currYear} Consumption`;
       case 'all': return "All-Time Budget vs Actual";
       default: return "Current Month Cycle";
     }
@@ -129,8 +145,6 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
   // -------------------------------------------------------------
   // CALENDAR DATA GENERATORS
   // -------------------------------------------------------------
-  const todayObj = new Date('2026-11-08T00:00:00');
-  const todayStr = '2026-11-08';
 
   // 1. Full 52/53-week GitHub style generator for Year / All Time
   const generateYearMatrix = (year) => {
@@ -154,9 +168,9 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
     let peakDayStr = '';
 
     while (curr <= endDate) {
-      const dateStr = curr.toISOString().split('T')[0];
+      const dateStr = formatLocalYMD(curr);
       const isCurrentYear = curr.getFullYear() === year;
-      const isFuture = year === 2026 && dateStr > todayStr;
+      const isFuture = year === currYear && dateStr > todayStr;
       const isToday = dateStr === todayStr;
 
       const info = heatmapData[dateStr] || { expense: 0, income: 0, count: 0, intensity: 0 };
@@ -205,17 +219,16 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
     return { weeks, totalOutflow, totalInflow, activeDaysCount, maxSpend, peakDayStr };
   };
 
-  // 2. Q4 (14 Weeks) Generator for Quarter
+  // 2. Quarter Matrix (Dynamic Current Quarter)
   const generateQuarterMatrix = () => {
-    const qYear = 2026;
-    // Oct 1 to Dec 31
-    const oct1 = new Date(qYear, 9, 1);
-    const startDay = oct1.getDay();
-    const startDate = new Date(qYear, 9, 1 - startDay);
+    const qYear = currYear;
+    const qStartMonth = (currQuarter - 1) * 3;
+    const qEndMonth = qStartMonth + 2;
+    const qStart = new Date(qYear, qStartMonth, 1);
+    const startDate = new Date(qYear, qStartMonth, 1 - qStart.getDay());
 
-    const dec31 = new Date(qYear, 11, 31);
-    const endDay = dec31.getDay();
-    const endDate = new Date(qYear, 11, 31 + (6 - endDay));
+    const qEnd = new Date(qYear, qEndMonth + 1, 0);
+    const endDate = new Date(qYear, qEndMonth, qEnd.getDate() + (6 - qEnd.getDay()));
 
     const weeks = [];
     let curr = new Date(startDate);
@@ -229,8 +242,8 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
     let peakDayStr = '';
 
     while (curr <= endDate) {
-      const dateStr = curr.toISOString().split('T')[0];
-      const isQ4 = curr.getMonth() >= 9 && curr.getMonth() <= 11 && curr.getFullYear() === qYear;
+      const dateStr = formatLocalYMD(curr);
+      const isQ4 = curr.getMonth() >= qStartMonth && curr.getMonth() <= qEndMonth && curr.getFullYear() === qYear;
       const isFuture = dateStr > todayStr;
       const isToday = dateStr === todayStr;
 
@@ -278,11 +291,11 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
     return { weeks, totalOutflow, totalInflow, activeDaysCount, maxSpend, peakDayStr };
   };
 
-  // 3. Month Matrix (November 2026 Calendar Grid)
+  // 3. Month Matrix (Dynamic Current Month Calendar Grid)
   const generateMonthDays = () => {
-    const year = 2026;
-    const month = 10; // 0-indexed: 10 is Nov
-    const totalDays = 30;
+    const year = currYear;
+    const month = currMonth;
+    const totalDays = new Date(year, month + 1, 0).getDate();
     const days = [];
 
     let totalOutflow = 0;
@@ -322,17 +335,17 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
     return { days, totalOutflow, totalInflow, activeDaysCount, maxSpend, peakDayStr };
   };
 
-  // 4. Week Matrix (Nov 02 to Nov 08, 2026)
+  // 4. Week Matrix (Current Monday to Sunday)
   const generateWeekDays = () => {
-    const weekDates = [
-      '2026-11-02',
-      '2026-11-03',
-      '2026-11-04',
-      '2026-11-05',
-      '2026-11-06',
-      '2026-11-07',
-      '2026-11-08'
-    ];
+    const dayOfWeek = todayObj.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const weekStart = new Date(todayObj);
+    weekStart.setDate(todayObj.getDate() + diffToMonday);
+    const weekDates = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
+      return formatLocalYMD(d);
+    });
     const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     let totalOutflow = 0;
     let totalInflow = 0;
@@ -363,28 +376,55 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
     return { days, totalOutflow, totalInflow, activeDaysCount, maxSpend, peakDayStr };
   };
 
-  // 5. Today's Hourly Slots (derived from monthlyTrends or seeded today data)
+  // 5. Today's Hourly Slots (derived from live today transactions)
   const generateTodaySlots = () => {
-    const slots = [
-      { time: '08:00', label: 'Early Morning', window: '00:00 – 08:00', expense: 0, income: 0, count: 0, intensity: 0 },
-      { time: '11:00', label: 'Late Morning', window: '08:01 – 11:00', expense: 620, income: 0, count: 1, intensity: 2 },
-      { time: '14:00', label: 'Afternoon', window: '11:01 – 14:00', expense: 340, income: 0, count: 1, intensity: 1 },
-      { time: '17:00', label: 'Late Afternoon', window: '14:01 – 17:00', expense: 0, income: 0, count: 0, intensity: 0 },
-      { time: '20:00', label: 'Evening', window: '17:01 – 20:00', expense: 0, income: 0, count: 0, intensity: 0 },
-      { time: '23:00', label: 'Night', window: '20:01 – 23:59', expense: 0, income: 0, count: 0, intensity: 0 },
+    const slotDefs = [
+      { time: '08:00', label: 'Early Morning', window: '00:00 – 08:00', maxMin: 8 * 60 },
+      { time: '11:00', label: 'Late Morning', window: '08:01 – 11:00', maxMin: 11 * 60 },
+      { time: '14:00', label: 'Afternoon', window: '11:01 – 14:00', maxMin: 14 * 60 },
+      { time: '17:00', label: 'Late Afternoon', window: '14:01 – 17:00', maxMin: 17 * 60 },
+      { time: '20:00', label: 'Evening', window: '17:01 – 20:00', maxMin: 20 * 60 },
+      { time: '23:00', label: 'Night', window: '20:01 – 23:59', maxMin: 24 * 60 },
     ];
-
-    let totalOutflow = 960;
+    const slots = slotDefs.map(s => ({ ...s, expense: 0, income: 0, count: 0, intensity: 0, topNote: '' }));
+    let totalOutflow = 0;
     let totalInflow = 0;
-    let activeDaysCount = 1;
-    let maxSpend = 620;
-    let peakDayStr = '11:00 (Health Clinic)';
+    let activeDaysCount = 0;
+    let maxSpend = 0;
+    let peakDayStr = '';
+
+    todayTxs.forEach(tx => {
+      const [hh, mm] = (tx.time || '12:00').split(':').map(n => parseInt(n, 10) || 0);
+      const mins = hh * 60 + mm;
+      const target = slots.find(s => mins <= s.maxMin) || slots[slots.length - 1];
+      const amt = Number(tx.amount) || 0;
+      target.count += 1;
+      if (tx.type === 'Expense') {
+        target.expense += amt;
+        totalOutflow += amt;
+        if (!target.topNote) target.topNote = tx.category || tx.description || '';
+      } else {
+        target.income += amt;
+        totalInflow += amt;
+      }
+    });
+
+    slots.forEach(s => {
+      if (s.expense > 0) {
+        s.intensity = s.expense >= 5000 ? 4 : s.expense >= 1500 ? 3 : s.expense >= 500 ? 2 : 1;
+        if (s.expense > maxSpend) {
+          maxSpend = s.expense;
+          peakDayStr = s.topNote ? `${s.time} (${s.topNote})` : s.time;
+        }
+      }
+    });
+    if (todayTxs.length > 0) activeDaysCount = 1;
 
     return { slots, totalOutflow, totalInflow, activeDaysCount, maxSpend, peakDayStr };
   };
 
   // Select appropriate matrix based on timeFilter
-  const activeYear = timeFilter === 'all' ? selectedAllTimeYear : 2026;
+  const activeYear = timeFilter === 'all' ? selectedAllTimeYear : currYear;
   const yearData = (timeFilter === 'year' || timeFilter === 'all') ? generateYearMatrix(activeYear) : null;
   const quarterData = timeFilter === 'quarter' ? generateQuarterMatrix() : null;
   const monthData = timeFilter === 'month' ? generateMonthDays() : null;
@@ -488,24 +528,24 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
             {timeFilter === 'all' && (
               <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold">
                 <button
-                  onClick={() => setSelectedAllTimeYear(2026)}
+                  onClick={() => setSelectedAllTimeYear(currYear)}
                   className={`px-3 py-1 rounded-lg transition-all ${
-                    selectedAllTimeYear === 2026 
+                    selectedAllTimeYear === currYear 
                       ? 'bg-gradient-to-r from-emerald-600 to-brand-700 text-white font-bold shadow-xs' 
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  2026 (Active)
+                  {currYear} (Active)
                 </button>
                 <button
-                  onClick={() => setSelectedAllTimeYear(2025)}
+                  onClick={() => setSelectedAllTimeYear(currYear - 1)}
                   className={`px-3 py-1 rounded-lg transition-all ${
-                    selectedAllTimeYear === 2025 
+                    selectedAllTimeYear === currYear - 1 
                       ? 'bg-gradient-to-r from-emerald-600 to-brand-700 text-white font-bold shadow-xs' 
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  2025 (Historical)
+                  {currYear - 1} (Historical)
                 </button>
               </div>
             )}
@@ -677,7 +717,7 @@ export default function VisualizationsView({ currency, monthlyTrends = [], timeF
               {/* Footer */}
               <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-500">
                 <span className="font-semibold text-slate-700">
-                  {hoveredCell ? hoveredCell.date : 'Q4 Fiscal Matrix: October, November, December 2026'}
+                  {hoveredCell ? hoveredCell.date : `Q${currQuarter} Fiscal Matrix (${currYear})`}
                 </span>
                 {hoveredCell && (
                   <div className="flex items-center space-x-4 font-medium">

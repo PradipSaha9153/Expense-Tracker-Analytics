@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, ArrowDownLeft, ArrowUpRight, Tag } from 'lucide-react';
 import { api } from '../services/api';
 import { CategoryBadge } from './CategoryIcon';
+import { formatLocalYMD } from '../utils/formatters';
 
 export default function TransactionModal({ isOpen, onClose, onSaveSuccess, transactionToEdit, categories, currency = '₹' }) {
   if (!isOpen) return null;
@@ -11,7 +12,7 @@ export default function TransactionModal({ isOpen, onClose, onSaveSuccess, trans
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('UPI');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(formatLocalYMD());
   const [time, setTime] = useState(new Date().toTimeString().substring(0, 5));
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,7 +25,7 @@ export default function TransactionModal({ isOpen, onClose, onSaveSuccess, trans
       setCategory(transactionToEdit.category || '');
       setSubcategory(transactionToEdit.subcategory || '');
       setPaymentMethod(transactionToEdit.payment_method || 'UPI');
-      setDate(transactionToEdit.date || new Date().toISOString().split('T')[0]);
+      setDate(transactionToEdit.date || formatLocalYMD());
       setTime(transactionToEdit.time || new Date().toTimeString().substring(0, 5));
       setDescription(transactionToEdit.description || '');
     } else {
@@ -33,7 +34,7 @@ export default function TransactionModal({ isOpen, onClose, onSaveSuccess, trans
       setCategory(type === 'Expense' ? 'Food & Beverages' : 'Salary');
       setSubcategory('');
       setPaymentMethod('UPI');
-      setDate(new Date().toISOString().split('T')[0]);
+      setDate(formatLocalYMD());
       setTime(new Date().toTimeString().substring(0, 5));
       setDescription('');
     }
